@@ -1,0 +1,244 @@
+:root {
+  --color-overlay-bg: rgba(0, 0, 0, 0.5);
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-border: #eaeaea;
+  --color-subtle-text: #666666;
+  --color-subtle-hover: #333333;
+  --color-disabled: #9ca3af;
+  --color-input-bg: #f1f1f1;
+  --color-placeholder: #a1a1a1;
+  --color-button-bg: #071934;
+  --color-button-hover: #0c2b5a;
+  --color-dropdown-border: #999;
+  --color-dropdown-hover: #f5f5f5;
+  --color-dropdown-selected-bg: #e6f0ff;
+  --color-dropdown-selected-text: #2563eb;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background-color: var(--color-overlay-bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modalContent {
+  background-color: var(--color-white);
+  border-radius: 8px;
+  width: 100%;
+  max-width: 450px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.modalHeader h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--color-black);
+  font-weight: 600;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--color-subtle-text);
+  transition: color 0.2s ease;
+}
+
+.closeButton:hover {
+  color: var(--color-subtle-hover);
+}
+
+.section {
+  width: 85%;
+  display: block;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  box-sizing: border-box;
+}
+
+.section h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  color: var(--color-black);
+  font-weight: 600;
+}
+
+.section p {
+  margin: 0 0 0.75rem 0;
+  color: var(--color-black);
+  font-size: 0.875rem;
+}
+
+.descriptionInput {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  background-color: var(--color-input-bg);
+  color: var(--color-black);
+  border-radius: 4px;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 0.875rem;
+  box-sizing: border-box;
+}
+
+.descriptionInput::placeholder {
+  color: var(--color-placeholder);
+}
+
+.descriptionInput:focus {
+  outline: none;
+  border-color: var(--color-black);
+  box-shadow: 0 0 0 2px rgba(5, 5, 5, 0.2);
+}
+
+.divider {
+  height: 1px;
+  background-color: var(--color-border);
+  margin: 0;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  padding: 1rem 1.5rem;
+}
+
+.submitButton {
+  width: 100%;
+  max-width: 150px;
+  padding: 0.7rem 0;
+  background-color: var(--color-button-bg);
+  color: var(--color-white);
+  border: none;
+  border-radius: 15px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.submitButton:disabled {
+  background-color: var(--color-disabled);
+  cursor: not-allowed;
+}
+
+.submitButton:not(:disabled):hover {
+  background-color: var(--color-button-hover);
+}
+
+.dropdownContainer {
+  position: relative;
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.dropdownHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  border: 1px solid var(--color-dropdown-border);
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--color-black);
+  background-color: var(--color-white);
+  transition: all 0.2s;
+}
+
+.dropdownHeader.active {
+  border-color: var(--color-black);
+}
+
+.dropdownIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: var(--color-subtle-text);
+  transition: transform 0.3s, fill 0.3s;
+}
+
+.dropdownHeader.active .dropdownIcon {
+  fill: var(--color-black);
+}
+
+.rotate {
+  transform: rotate(180deg);
+}
+
+.dropdownOptions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: var(--color-white);
+  border: 1px solid #ddd;
+  color: var(--color-black);
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 0.25rem;
+}
+
+.dropdownOption {
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.dropdownOption:hover {
+  background-color: var(--color-dropdown-hover);
+}
+
+.dropdownOption.selected {
+  background-color: var(--color-dropdown-selected-bg);
+  color: var(--color-dropdown-selected-text);
+  font-weight: 500;
+}
+
+@media (max-width: 480px) {
+  .modalContent {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0.75rem;
+    max-height: 95vh;
+  }
+
+  .modalHeader,
+  .section,
+  .buttonContainer {
+    padding: 1rem;
+  }
+
+  .submitButton {
+    font-size: 0.95rem;
+  }
+
+  .descriptionInput {
+    font-size: 0.85rem;
+  }
+
+  .dropdownOption {
+    font-size: 0.85rem;
+  }
+}
