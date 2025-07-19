@@ -1,23 +1,30 @@
 import React, { useState, useRef, useEffect } from "react";
 import styles from "./ModalReporte.module.css";
+import { saveReporte } from "@/lib/service/ReporteService";
 
 interface ReportModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (reason: string, description: string) => void;
+  userID: string;
+  jogoID: string;
 }
 
 const ModalReporte: React.FC<ReportModalProps> = ({
   isOpen,
   onClose,
-  onSubmit,
+  userID,
+  jogoID,
 }) => {
-  const [problemType, setProblemType] = useState<string>("Conteúdo impróprio");
-  const [description, setDescription] = useState<string>("");
+  const [tipoProblema, setTipoProblema] =
+    useState<string>("Conteúdo impróprio");
+  const [razao, setRazao] = useState<string>("");
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const problemTypes = [
+  const tiposProblema = [
     "Conteúdo impróprio",
     "Informação incorreta",
     "Problema técnico",
@@ -44,10 +51,48 @@ const ModalReporte: React.FC<ReportModalProps> = ({
     };
   }, [isDropdownOpen]);
 
-  const handleSubmit = () => {
-    onSubmit(problemType, description);
-    setDescription("");
-    onClose();
+  const handleSubmit = async () => {
+    if (!razao.trim()) {
+      setError("Por favor, descreva o problema");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      // Chamada ao serviço de reporte
+      const result = await saveReporte(jogoID, userID, {
+        tipoProblema,
+        razao,
+      });
+
+      if (!result.success) {
+        throw new Error(result.error || "Erro ao enviar reporte");
+      }
+
+      // Animação de sucesso
+      setIsSuccess(true);
+      
+      // Resetar estados e fechar modal após 1.5 segundos
+      setTimeout(() => {
+        setRazao("");
+        setIsSuccess(false);
+        onClose();
+      }, 1500);
+
+    } catch (err: unknown) {
+      console.error("Erro ao enviar reporte:", err);
+
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Ocorreu um erro. Tente novamente mais tarde.");
+      }
+
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -69,7 +114,7 @@ const ModalReporte: React.FC<ReportModalProps> = ({
               className={`${styles.dropdownHeader} ${isDropdownOpen ? styles.active : ""}`}
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
-              <span>{problemType}</span>
+              <span>{tipoProblema}</span>
               <svg
                 className={`${styles.dropdownIcon} ${isDropdownOpen ? styles.rotate : ""}`}
                 viewBox="0 0 24 24"
@@ -80,12 +125,12 @@ const ModalReporte: React.FC<ReportModalProps> = ({
 
             {isDropdownOpen && (
               <div className={styles.dropdownOptions}>
-                {problemTypes.map((type) => (
+                {tiposProblema.map((type) => (
                   <div
                     key={type}
-                    className={`${styles.dropdownOption} ${problemType === type ? styles.selected : ""}`}
+                    className={`${styles.dropdownOption} ${tipoProblema === type ? styles.selected : ""}`}
                     onClick={() => {
-                      setProblemType(type);
+                      setTipoProblema(type);
                       setIsDropdownOpen(false);
                     }}
                   >
@@ -102,22 +147,31 @@ const ModalReporte: React.FC<ReportModalProps> = ({
           <p>Nos ajude a entender o problema</p>
           <textarea
             className={styles.descriptionInput}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            value={razao}
+            onChange={(e) => setRazao(e.target.value)}
             placeholder="Escreva aqui"
             rows={4}
           />
+          {error && <p className={styles.errorMessage}>{error}</p>}
         </div>
 
         <div className={styles.divider}></div>
 
         <div className={styles.buttonContainer}>
           <button
-            className={styles.submitButton}
+            className={`${styles.submitButton} ${isSuccess ? styles.success : ""}`}
             onClick={handleSubmit}
-            disabled={!description.trim()}
+            disabled={isSubmitting || isSuccess || !razao.trim()}
           >
-            Enviar
+            {isSuccess ? (
+              <svg className={styles.checkIcon} viewBox="0 0 24 24">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+              </svg>
+            ) : isSubmitting ? (
+              <div className={styles.spinner}></div>
+            ) : (
+              "Enviar"
+            )}
           </button>
         </div>
       </div>

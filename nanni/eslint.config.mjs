@@ -22,10 +22,10 @@ const eslintConfig = [
       "no-var": "error",
 
       // Exemplo: forçar uso de ponto e vírgula
-      "semi": ["error", "always"],
+      semi: ["error", "always"],
 
       // Exemplo: usar aspas duplas para strings
-      "quotes": ["error", "double"],
+      quotes: ["error", "double"],
 
       // Exemplo: forçar arrow functions para funções anônimas
       "prefer-arrow-callback": "error",
@@ -34,14 +34,18 @@ const eslintConfig = [
       "react/prop-types": "off",
 
       // Exemplo: permitir importações relativas sem extensão
-      "import/extensions": ["error", "ignorePackages", {
-        ts: "never",
-        tsx: "never",
-        js: "never",
-        jsx: "never"
-      }],
-    }
-  }
+      "import/extensions": [
+        "error",
+        "ignorePackages",
+        {
+          ts: "never",
+          tsx: "never",
+          js: "never",
+          jsx: "never",
+        },
+      ],
+    },
+  },
 ];
 
 export default eslintConfig;

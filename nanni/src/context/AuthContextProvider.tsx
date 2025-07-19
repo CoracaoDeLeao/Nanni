@@ -14,7 +14,7 @@ import {
 } from "firebase/auth";
 import { auth } from "@/lib/Firebase";
 import type { User } from "@/types/User";
-import { fetchUserAdditionalData } from "@/lib/userService";
+import { fetchUserAdditionalData } from "@/lib/service/UserService";
 
 type AuthContextType = {
   user: User | null;

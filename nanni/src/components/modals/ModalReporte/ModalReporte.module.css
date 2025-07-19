@@ -108,7 +108,7 @@
 .descriptionInput:focus {
   outline: none;
   border-color: var(--color-black);
-  box-shadow: 0 0 0 2px rgba(5, 5, 5, 0.2);
+  box-shadow: 0 0 0 2px rgba(12, 43, 90, 0.2);
 }
 
 .divider {
@@ -146,6 +146,11 @@
   background-color: var(--color-button-hover);
 }
 
+.submitButton.success {
+  background-color: #4ade80;
+  animation: pulse 1.5s infinite;
+}
+
 .dropdownContainer {
   position: relative;
   margin-top: 0.5rem;
@@ -173,7 +178,9 @@
   width: 1.25rem;
   height: 1.25rem;
   fill: var(--color-subtle-text);
-  transition: transform 0.3s, fill 0.3s;
+  transition:
+    transform 0.3s,
+    fill 0.3s;
 }
 
 .dropdownHeader.active .dropdownIcon {
@@ -214,6 +221,50 @@
   background-color: var(--color-dropdown-selected-bg);
   color: var(--color-dropdown-selected-text);
   font-weight: 500;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  margin: 0 auto;
+}
+
+.checkIcon {
+  width: 24px;
+  height: 24px;
+  fill: #fff;
+  animation: scaleIn 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(74, 222, 128, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0);
+  }
 }
 
 @media (max-width: 480px) {
