@@ -53,7 +53,7 @@ export async function POST(request: Request) {
   } catch (error: unknown) {
     // Log detalhado do erro
     let errorDetails = "Unknown error";
-    
+
     if (axios.isAxiosError(error)) {
       errorDetails = JSON.stringify({
         status: error.response?.status,
@@ -67,7 +67,10 @@ export async function POST(request: Request) {
     console.error("Erro detalhado no upload:", errorDetails);
 
     return new NextResponse(
-      JSON.stringify({ error: "Erro ao enviar imagem para ImageBB.", details: errorDetails }),
+      JSON.stringify({
+        error: "Erro ao enviar imagem para ImageBB.",
+        details: errorDetails,
+      }),
       { status: 500, headers: corsHeaders },
     );
   }

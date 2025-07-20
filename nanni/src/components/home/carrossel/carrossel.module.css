@@ -1,0 +1,136 @@
+.info-container {
+  z-index: 1;
+  position: relative;
+  top: -20;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  color: var(--white);
+}
+
+.info-box {
+  display: grid;
+  gap: 15px;
+  border-radius: 4px;
+  width: 60%;
+  max-height: 100%;
+  padding: 20px;
+  background-color: var(--foreground);
+  transition: width ease 0.7s;
+}
+
+.info-texto {
+  display: block;
+  overflow-y: hidden;
+  font-size: 16;
+  height: auto;
+  transition: max-height ease 0.5s;
+}
+
+.info-texto-fechado {
+  max-height: 70px;
+  backdrop-filter: blur(6px);
+}
+
+.info-texto-aberto {
+  max-height: 200px;
+}
+
+.info-texto-fechado::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30px;
+  background: linear-gradient(to top, var(--foreground), transparent);
+  pointer-events: none;
+}
+
+.info-expansor {
+  font-size: 16;
+  font-weight: var(--semi-bold);
+  color: var(--p5);
+}
+
+.info-expansor:hover {
+  cursor: pointer;
+}
+
+.info-details-div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+}
+
+.info-details-tags {
+  flex: 1;
+  opacity: 0.6;
+  font-size: 14;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.info-details-avaliacao {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.info-details-avaliacao > p {
+  font-size: 14;
+  letter-spacing: 2px;
+  padding-top: 2px;
+}
+
+.info-details-preco {
+  background-color: transparent;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16;
+  background-color: var(--p5);
+  color: var(--white);
+  border-radius: var(--container-radius-global);
+}
+
+.info-details-preco:hover {
+  cursor: pointer;
+}
+
+.pagination-div {
+  display: flex;
+  justify-content: center;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+}
+
+.pagination :global(.swiper-pagination-bullet) {
+  width: 80px;
+  height: 8px;
+  background-color: var(--foreground);
+  opacity: 0.6;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.pagination :global(.swiper-pagination-bullet-active) {
+  background-color: var(--foreground);
+  opacity: 1;
+}
+
+@media screen and (max-width: 740px) {
+  .info-box {
+    width: 100%;
+  }
+}

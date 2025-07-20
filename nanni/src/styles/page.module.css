@@ -1,0 +1,124 @@
+.div-central {
+  display: flex;
+  justify-content: center;
+  padding-top: 10px;
+  transition: padding ease 0.3s;
+}
+
+.inner-div {
+  width: 100%;
+  max-width: var(--screen-max-width);
+}
+
+.carrossel-div {
+  position: relative;
+  z-index: 10;
+}
+
+.main {
+  /* display: grid; */
+  /* overflow-x: hidden;
+  margin-top: 20px;
+  margin-bottom: 20px; */
+  position: relative;
+  padding-top: 180px;
+  margin-top: 0;
+  top: -160px;
+  border-top: 20px solid var(--foreground);
+  transition:
+    padding ease 0.3s,
+    margin ease 0.3s;
+}
+
+/* DESTAQUE */
+.destaque-container {
+  padding: 30px 20px;
+  padding-bottom: 10px;
+  background-color: var(--foreground);
+  color: var(--white);
+  border-radius: var(--container-radius-global);
+  transition: padding ease 0.3s;
+}
+
+.destaque-list {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-bottom: 40px;
+}
+
+.destaque > p {
+  text-align: center;
+  font-weight: var(--semi-bold);
+  text-transform: uppercase;
+}
+
+/* RECEM LANCHADOS */
+.novos-container {
+  padding-top: 30px;
+  padding-bottom: 50px;
+}
+
+.novos-titulo {
+  font-weight: bolder;
+  padding-bottom: 20px;
+  padding-left: 18px;
+}
+
+.novos-div {
+  display: flex;
+  flex-direction: row;
+}
+
+.novos-list {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  gap: 8px;
+}
+
+.novos-button-div {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-right: 20px;
+  background-color: var(--white);
+  color: var(--foreground);
+  z-index: 10;
+}
+
+.novos-button-prev-desativado > * {
+  width: 0;
+  opacity: 0;
+}
+
+.novos-button-next-desativado {
+  opacity: 0.6;
+}
+
+.novosListDivs {
+  align-items: center;
+  overflow: hidden;
+  gap: 10px;
+}
+
+@media screen and (max-width: 740px) {
+  .main {
+    padding-left: 10px;
+    padding-right: 10px;
+    margin: 0;
+  }
+
+  .div-central {
+    padding: 2px;
+  }
+
+  .destaque-container {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
