@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-// import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "@/styles/globals.css";
+import { AuthProvider } from "@/context/AuthContextProvider";
 import { Header } from "@/components/header";
 
 // Talvez seja isso que está dando erro de fonte no firefox
@@ -26,7 +27,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body>
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <AuthProvider>{children}</AuthProvider>
         <Header />
         {children}
       </body>
