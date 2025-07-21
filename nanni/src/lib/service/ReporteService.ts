@@ -1,6 +1,12 @@
 import { db } from "@/lib/Firebase";
 import { COLLECTIONS } from "@/constants/FirebaseCollections";
-import { addDoc, collection, doc, serverTimestamp } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDocs,
+  serverTimestamp,
+} from "firebase/firestore";
 
 export const saveReporte = async (
   jogoID: string,
@@ -8,7 +14,7 @@ export const saveReporte = async (
   reporteData: {
     tipoProblema: string;
     razao: string;
-  },
+  }
 ) => {
   try {
     // Referência ao documento pai
@@ -20,7 +26,7 @@ export const saveReporte = async (
     // Referência à subcoleção dentro do documento pai
     const reportesCollectionRef = collection(
       parentDocRef,
-      COLLECTIONS.REPORTES,
+      COLLECTIONS.SUB_REPORTES
     );
 
     // Adiciona documento com timestamp do servidor
@@ -39,6 +45,43 @@ export const saveReporte = async (
     return {
       success: false,
       error: "Erro ao salvar reporte no banco de dados",
+    };
+  }
+};
+
+export const getReportesByJogoID = async (jogoId: string) => {
+  try {
+    // Referência ao documento do jogo
+    const jogoDocRef = doc(db, COLLECTIONS.JOGOS, jogoId);
+
+    // Referência à subcoleção de reportes
+    const reportesCollectionRef = collection(jogoDocRef, COLLECTIONS.SUB_REPORTES);
+
+    // Buscar todos os documentos da subcoleção
+    const reportesSnapshot = await getDocs(reportesCollectionRef);
+
+    // 4. Mapear documentos e expandir dados do usuário
+    const reportes = await Promise.all(
+      reportesSnapshot.docs.map(async (reporteDoc) => {
+        const reporteData = reporteDoc.data();
+
+        return {
+          id: reporteDoc.id,
+          ...reporteData,
+        };
+      })
+    );
+
+    return {
+      success: true,
+      reportes,
+    };
+  } catch (error) {
+    console.error("Erro ao buscar reportes:", error);
+    return {
+      success: false,
+      error: "Erro ao carregar reportes",
+      reportes: [],
     };
   }
 };

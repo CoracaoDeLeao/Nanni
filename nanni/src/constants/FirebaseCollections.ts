@@ -1,7 +1,8 @@
 export const COLLECTIONS = {
   USERS: "usuarios",
   JOGOS: "jogos",
-  REPORTES: "reportes",
+  SUB_REPORTES: "reportes",
+  VENDAS: "vendas",
 } as const;
 
 export type CollectionName = keyof typeof COLLECTIONS;
