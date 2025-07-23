@@ -1,0 +1,486 @@
+/* components/Sidebar.module.css */
+.sidebar {
+  --sidebar-bg: #1a1f2d;
+  --sidebar-text: #e0e6f0;
+  --sidebar-accent: #4a6cf7;
+  --sidebar-hover: #222837;
+  --sidebar-active: #2d3447;
+  --sidebar-border: #2a3142;
+  --sidebar-secondary: #7d8ca5;
+  --sidebar-download: #4ac76b;
+  --sidebar-radius: 10px;
+  --sidebar-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  --transition: all 0.3s ease;
+
+  background-color: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  height: 100vh;
+  width: 300px; /* Largura padrão para desktop */
+  padding: 24px 16px;
+  box-sizing: border-box;
+  position: fixed;
+  left: 0;
+  top: 0;
+  overflow-y: auto;
+  overflow-x: hidden; /* Garante que o conteúdo não vaze horizontalmente */
+  transition: var(--transition);
+  z-index: 100;
+  box-shadow: var(--sidebar-shadow);
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--sidebar-border);
+}
+
+/* Estado recolhido para desktop */
+.sidebar.collapsed {
+  width: 80px; /* Largura menor quando recolhida (ícones visíveis) */
+  padding: 24px 12px; /* Ajuste de padding para o estado recolhido */
+  align-items: center; /* Centraliza itens quando recolhida */
+}
+
+/* Oculta elementos que não devem aparecer quando a sidebar está recolhida */
+.sidebar.collapsed .title,
+.sidebar.collapsed .searchInput,
+.sidebar.collapsed .clearButton,
+.sidebar.collapsed .gamesHeader,
+.sidebar.collapsed .gameName,
+.sidebar.collapsed .downloadButton {
+  opacity: 0;
+  visibility: hidden;
+  width: 0;
+  height: 0;
+  padding: 0;
+  margin: 0;
+  transition: opacity 0.1s ease, visibility 0.1s ease, width 0.1s ease, height 0.1s ease;
+}
+
+/* Mostra apenas o ícone de busca quando recolhido */
+.sidebar.collapsed .searchIcon {
+  left: 50%;
+  transform: translateX(-50%);
+  position: relative; /* Ajuste para centralizar */
+}
+
+/* Ajustes para o logo e botão de colapso no estado recolhido */
+.sidebar.collapsed .logoWrapper {
+  position: relative; /* Ajusta a posição para o fluxo normal */
+  left: auto;
+  transform: none;
+  margin-bottom: 20px; /* Espaço abaixo do logo */
+}
+
+.sidebar.collapsed .collapseButton {
+  position: relative; /* Ajusta a posição para o fluxo normal */
+  align-self: flex-end; /* Alinha o botão à direita */
+}
+
+/* Header da sidebar */
+.sidebarHeader {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 1.75rem;
+  position: relative;
+  width: 100%; /* Garante que o header ocupe a largura total */
+}
+
+.logoWrapper {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex; /* Para centralizar o logo */
+  align-items: center;
+  justify-content: center;
+  height: 41px; /* Garante que o wrapper tenha altura para posicionamento */
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  font-size: 1.625rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  gap: 5px; /* Corrigido de 'gap: 5' para 'gap: 5px' */
+  letter-spacing: -0.5px;
+  background: white;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  white-space: nowrap; /* Evita quebra de linha do título */
+  transition: var(--transition);
+}
+
+.collapseButton {
+  background: #2a3142;
+  border: none;
+  color: var(--sidebar-text);
+  width: 36px;
+  height: 36px;
+  border-radius: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0; /* Evita que o botão encolha */
+}
+
+.collapseIcon {
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.collapseButton:hover {
+  background-color: var(--sidebar-accent);
+  transform: scale(1.1);
+}
+
+/* Ícone de seta para o estado expandido e recolhido */
+.sidebar.collapsed .collapseIcon {
+  transform: rotate(180deg); /* Gira a seta quando recolhida */
+}
+
+.searchContainer {
+  position: relative;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 16px;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  color: var(--sidebar-secondary);
+  pointer-events: none;
+  transition: var(--transition);
+}
+
+.searchInput {
+  width: 100%;
+  padding: 14px 20px;
+  padding-left: 48px;
+  background-color: #222837;
+  border: 1px solid var(--sidebar-border);
+  border-radius: var(--sidebar-radius);
+  color: var(--sidebar-text);
+  font-size: 15px;
+  transition: var(--transition);
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--sidebar-accent);
+  box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.2);
+}
+
+.clearButton {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--sidebar-secondary);
+  font-size: 18px;
+  cursor: pointer;
+  transition: var(--transition);
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clearButton:hover {
+  color: var(--sidebar-text);
+  background-color: var(--sidebar-hover);
+}
+
+.gamesHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  width: 100%;
+  transition: var(--transition);
+}
+
+.subtitle {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap; /* Evita quebra de linha */
+}
+
+.gameCount {
+  font-size: 14px;
+  color: var(--sidebar-secondary);
+  background-color: #2a3142;
+  padding: 4px 10px;
+  border-radius: 20px;
+  flex-shrink: 0; /* Evita que o contador encolha */
+}
+
+.gamesList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 8px;
+  width: 100%;
+}
+
+/* Scrollbar personalizada */
+.gamesList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.gamesList::-webkit-scrollbar-track {
+  background: #1a1f2d;
+  border-radius: 10px;
+}
+
+.gamesList::-webkit-scrollbar-thumb {
+  background: #4a6cf7;
+  border-radius: 10px;
+}
+
+.gameItem {
+  display: flex;
+  align-items: center;
+  background-color: #222837;
+  border: 1px solid var(--sidebar-border);
+  border-radius: var(--sidebar-radius);
+  cursor: pointer;
+  transition: var(--transition);
+  gap: 14px;
+  position: relative;
+  padding-right: 14px; /* Adiciona padding para o botão de download */
+}
+
+.gameItem:hover {
+  background-color: var(--sidebar-hover);
+  border-color: var(--sidebar-accent);
+}
+
+.gameItem.active {
+  background-color: var(--sidebar-active);
+  border-color: var(--sidebar-accent);
+  box-shadow: 0 0 0 2px rgba(74, 108, 247, 0.3);
+}
+
+.gameIcon {
+  font-size: 28px;
+  width: 75px;
+  height: 75px;
+  background: linear-gradient(135deg, #2d3447, #222837);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.gameInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.gameName {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: var(--transition);
+}
+
+.downloadButton {
+  background: linear-gradient(135deg, var(--sidebar-download), #3aa355);
+  color: white;
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin: 14px;
+  transition: var(--transition);
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(74, 199, 107, 0.2);
+}
+
+.downloadIcon {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.downloadButton:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 15px rgba(74, 199, 107, 0.3);
+}
+
+.noResults {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #222837;
+  border-radius: var(--sidebar-radius);
+  border: 1px dashed var(--sidebar-border);
+}
+
+.noResultsIcon {
+  font-size: 40px;
+  margin-bottom: 16px;
+}
+
+.clearSearchButton {
+  margin-top: 16px;
+  padding: 8px 16px;
+  background-color: var(--sidebar-accent);
+  color: white;
+  border: none;
+  border-radius: var(--sidebar-radius);
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 500;
+}
+
+.clearSearchButton:hover {
+  background-color: #3a5df0;
+  transform: translateY(-2px);
+}
+
+/* Collapsed button for desktop (not directly used with the main collapse logic anymore, but kept for reference if needed elsewhere) */
+.collapsedButton {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4a6cf7, #9d6cfe);
+  color: white;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  box-shadow: 0 4px 10px rgba(74, 108, 247, 0.3);
+  margin-top: 10px;
+}
+
+.collapsedButton:hover {
+  transform: scale(1.1);
+}
+
+/* --- Media Queries para Responsividade --- */
+
+/* Para telas menores que 768px (geralmente tablets e celulares) */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%; /* Ocupa toda a largura da tela */
+    height: 100vh;
+    left: -100%; /* Esconde a sidebar fora da tela */
+    padding: 24px 20px; /* Ajusta o padding para telas menores */
+    border-right: none; /* Remove a borda direita */
+    box-shadow: none; /* Remove a sombra padrão para não "dobrar" */
+  }
+
+  /* Quando a sidebar está ativa (aberta) em mobile */
+  .sidebar.collapsed {
+    width: 100%; /* Em mobile, 'collapsed' significa fechada, e a largura é 0 */
+    left: -100%; /* Garante que ela esteja fora da tela quando "fechada" */
+    padding: 0;
+  }
+
+  /* Quando a sidebar não está collapsed (ou seja, está aberta) */
+  .sidebar:not(.collapsed) {
+    left: 0; /* Move a sidebar para a tela */
+    box-shadow: var(--sidebar-shadow); /* Adiciona sombra quando aberta */
+  }
+
+  .sidebarHeader {
+    justify-content: space-between; /* Ajusta o alinhamento em telas menores */
+  }
+
+  .logoWrapper {
+    position: static; /* Remove o posicionamento absoluto */
+    transform: none;
+  }
+
+  .collapseButton {
+    order: 1; /* Coloca o botão à direita */
+  }
+
+  .title {
+    font-size: 1.5rem; /* Reduz o tamanho da fonte do título */
+    margin-bottom: 20px;
+  }
+
+  .gamesList {
+    padding-right: 0; /* Remove padding extra no mobile */
+  }
+
+  /* Oculta o botão de colapso quando a sidebar está aberta em mobile para que o 'X' possa ser usado */
+  .sidebar:not(.collapsed) .collapseButton {
+    display: flex; /* Mantém visível para fechar */
+  }
+
+  /* Oculta o botão de colapso quando a sidebar está fechada em mobile */
+  .sidebar.collapsed .collapseButton {
+    display: none;
+  }
+
+  .sidebar.collapsed .title,
+  .sidebar.collapsed .searchInput,
+  .sidebar.collapsed .clearButton,
+  .sidebar.collapsed .gamesHeader,
+  .sidebar.collapsed .gameName,
+  .sidebar.collapsed .downloadButton {
+    opacity: 1; /* Garante que os elementos estejam visíveis quando a sidebar está aberta em mobile */
+    visibility: visible;
+    width: auto;
+    height: auto;
+    margin: revert;
+    padding: revert;
+  }
+}
+
+/* Para telas muito pequenas (smartphones) */
+@media (max-width: 480px) {
+  .sidebar {
+    padding: 16px; /* Reduz ainda mais o padding */
+  }
+
+  .title {
+    font-size: 1.3rem; /* Título menor para telas muito pequenas */
+  }
+
+  .gameIcon {
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+  }
+
+  .gameName {
+    font-size: 15px;
+  }
+}

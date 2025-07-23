@@ -4,6 +4,7 @@ import { useState } from "react";
 import Auth from "@/components/Auth";
 import { getReportesByJogoID } from "@/lib/service/ReporteService"; // ajuste o caminho se necessário
 import { getCompleteSale, processSale } from "@/lib/service/PaymentService";
+import Sidebar from "@/components/sidebarLib";
 
 export default function LoginPage() {
   const [jogoId, setJogoId] = useState("");
@@ -78,6 +79,10 @@ export default function LoginPage() {
             {loading ? "Processando..." : "Pagar Agora"}
           </button>
         </div>
+
+        <hr />
+
+        <Sidebar/>
       </main>
     </div>
   );
