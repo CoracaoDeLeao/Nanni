@@ -3,6 +3,7 @@ import styles from "@/styles/page.module.css";
 import Image from "next/image";
 import { JogoItem } from "@/components/jogo/item";
 import Carrossel from "@/components/home/carrossel";
+import { JogoItemProps } from "@/types/JogoItemProps";
 
 export default function Home() {
   const tst_novos: JogoItemProps[] = [
@@ -77,7 +78,7 @@ export default function Home() {
               <div
                 className={`${styles["novos-button-div"]} ${!novosNextBtn_ativo ? "" : styles["novos-button-prev-desativado"]}`}
               >
-                <button className={`g-button-image`}>
+                <button className={"g-button-image"}>
                   <Image
                     src={"/ic/caret-left-solid.svg"}
                     alt={"Voltar lista de novos"}
@@ -94,7 +95,7 @@ export default function Home() {
               <div
                 className={`${styles["novos-button-div"]} ${novosNextBtn_ativo ? "" : styles["novos-button-next-desativado"]}`}
               >
-                <button className={`g-button-image`}>
+                <button className={"g-button-image"}>
                   <Image
                     src={"/ic/caret-right-solid.svg"}
                     alt={"Avançar lista de novos"}
@@ -110,11 +111,3 @@ export default function Home() {
     </div>
   );
 }
-
-type JogoItemProps = {
-  imagem: string;
-  imagem_alt: string;
-  avaliacao: string;
-  preco: string;
-  tags: string[];
-};

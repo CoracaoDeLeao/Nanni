@@ -1,15 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
+import styles from "./components.header.carrossel.module.css";
 
 export function Header() {
   const userNome = "Nome do Usuário";
 
   return (
-    <header className="padding-horizontal-global">
-      <div className="header-superior">
+    <header className={`${styles["header"]} ${styles["padding-horizontal-global"]}`}>
+      <div className={styles["header-superior"]}>
         <Link href="/">
           <Image
-            src={"logo.svg"}
+            src={"/logo.svg"}
             alt={"Logo"}
             quality={100}
             width={110}
@@ -18,11 +19,13 @@ export function Header() {
           />
         </Link>
       </div>
-      <div className="header-perfil">
-        <p>{userNome}</p>
-        <div className="header-perfil-imagem">
+      <div className={styles["header-perfil"]}>
+        <p className={styles["header-perfil__nome"]}>
+          {userNome}
+        </p>
+        <div className={styles["header-perfil__imagem"]}>
           <Image
-            src={"file.svg"}
+            src={"/file.svg"}
             alt={"Foto de Perfil"}
             width={70}
             height={70}
@@ -30,7 +33,7 @@ export function Header() {
           />
         </div>
       </div>
-      <div className="header-inferior">
+      <div className={styles["header-inferior"]}>
         <ul>
           <li>Biblioteca</li>
           <li>Lista de Desejos</li>
