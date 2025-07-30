@@ -52,7 +52,34 @@
   color: var(--white);
 }
 
+.header-perfil__imagem {
+  display: flex;
+  flex-direction: column;
+}
+
 .header-perfil__imagem > * {
   border-radius: 100%;
   border: 2px solid var(--background);
+}
+
+.header-perfil__cart {
+  display: flex;
+  justify-content: space-between;
+  border-radius: 15px;
+  padding: 5px 10px;
+  margin: 5px 4px;
+  background-color: var(--p3);
+  color: var(--white);
+  user-select: none;
+}
+
+.header-perfil__cart:hover {
+  cursor: pointer;
+}
+
+.header-perfil__cart > p {
+  padding-top: 0;
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--white);
 }

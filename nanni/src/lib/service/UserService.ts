@@ -4,6 +4,8 @@ import { COLLECTIONS } from "@/constants/FirebaseCollections";
 
 type FirestoreUserData = {
   cargo?: boolean;
+  nome?: string,
+  avatar?: string,
   // outros campos que você espera do Firestore
 };
 
@@ -17,6 +19,9 @@ export async function fetchUserAdditionalData(uid: string) {
 
   return {
     isDev: data.cargo || false,
+    // > Para Header-perfil
+    nome: data.nome || undefined,
+    avatar: data.avatar || undefined,
     // adicione outros campos aqui se precisar
   };
 }

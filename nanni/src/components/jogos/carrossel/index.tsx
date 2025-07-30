@@ -83,7 +83,7 @@ export default function JogosGaleria(
                             </svg>
                     </button>
                     <button 
-                        className={`g-button-image ${styles["control-next"]} ${activeIndex == slideMax - 1 ? "g-desativado" : ""}`}
+                        className={`g-button-image ${styles["control-next"]} ${activeIndex == imgs.length - 1 ? "g-desativado" : ""}`}
                         onClick={() => swiperRef.current?.slideNext()}>
                             <svg
                                 viewBox="0 0 16 16"
