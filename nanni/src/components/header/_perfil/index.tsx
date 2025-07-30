@@ -20,7 +20,7 @@ export function HeaderPerfil() {
     useEffect(() => {
         async function run() {
             try {
-                const tmp_user = await fetchUserAdditionalData("CJhHoFM6l3NhK3xfqL2U4yK9bXR2");
+                const tmp_user = await fetchUserAdditionalData(user?.id);
 
                 if(tmp_user?.nome) {
                     setPerfil({
@@ -37,8 +37,6 @@ export function HeaderPerfil() {
         if(user?.id) {
             run();
         }
-
-        run();
     }, [user]);
 
     return perfil.loaded && (
