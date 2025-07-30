@@ -1,0 +1,161 @@
+.container {
+  --color-overlay-bg: rgba(0, 0, 0, 0.5);
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-border: #eaeaea;
+  --color-subtle-text: #666666;
+  --color-subtle-hover: #333333;
+  --color-disabled: #9ca3af;
+  --color-input-bg: #f1f1f1;
+  --color-placeholder: #a1a1a1;
+  --color-button-bg: #071934;
+  --color-button-hover: #0c2b5a;
+  --color-button-success: #019934;
+  --color-button-success-hover: #01bf40;
+  --color-dropdown-border: #999;
+  --color-dropdown-hover: #f5f5f5;
+  --color-dropdown-selected-bg: #e6f0ff;
+  --color-dropdown-selected-text: #2563eb;
+  --color-page-bg: #a3afbb;
+  --color-form-bg: rgb(4, 0, 255);
+  --color-form-header-bg: rgb(7, 25, 52);
+  --color-form-header-border: rgb(255, 255, 255);
+  --color-preview-bg: rgb(255, 0, 0);
+  --color-gallery-btn-bg: #28a745;
+
+  background-color: var(--color-page-bg);
+  padding: 20px;
+  display: flex;
+  height: auto;
+}
+
+.mainContainer {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  align-items: stretch;
+  background-color: var(--color-white);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 10px var(--color-overlay-bg);
+}
+
+.contentContainer {
+  flex: 1;
+  display: flex;
+}
+
+.motionContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.previewContainer {
+  flex: 1;
+  background-color: var(--color-preview-bg);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 10px var(--color-overlay-bg);
+}
+
+/* Nav BTN */
+
+.navBTNS {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.navBTNConrainer {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.btnVoltar {
+  background-color: var(--color-white);
+  color: var(--color-button-bg);
+  border: 2px solid var(--color-button-bg);
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.btnVoltar:hover {
+  background-color: var(--color-button-bg);
+  color: var(--color-white);
+}
+
+.btnAvancar {
+  background-color: var(--color-button-bg);
+  color: var(--color-white);
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btnAvancar:hover {
+  background-color: var(--color-button-hover);
+}
+
+.btnPublicar {
+  background-color: var(--color-button-success);
+  color: var(--color-white);
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btnPublicar:hover {
+  background-color: var(--color-button-success-hover);
+}
+
+/* Steps BTN */
+
+.buttonsContainer {
+  display: flex;
+  gap: 0.1rem;
+  margin-right: 1rem;
+}
+
+.stepButton {
+  background: transparent;
+  color: var(--color-button-bg);
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+}
+
+.stepButton.active {
+  border-radius: 50%;
+  background: var(--color-button-bg);
+  color: var(--color-white);
+  box-shadow: 0 2px 5px var(--color-overlay-bg);
+}
+
+.stepButton:hover {
+  background: var(--color-button-bg);
+  border-radius: 50%;
+  color: var(--color-white);
+}

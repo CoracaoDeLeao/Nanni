@@ -1,0 +1,390 @@
+/* CONTAINER PRINCIPAL */
+.formContainer {
+  --color-overlay-bg: rgba(0, 0, 0, 0.5);
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-border: #eaeaea;
+  --color-subtle-text: #666666;
+  --color-subtle-hover: #333333;
+  --color-disabled: #9ca3af;
+  --color-input-bg: #f8f9fa;
+  --color-placeholder: #a1a1a1;
+  --color-button-bg: #071934;         /* Cor principal */
+  --color-button-hover: #0c2b5a;      /* Tom mais escuro */
+  --color-primary: #0a2357;           /* Tom médio */
+  --color-light: #1a3b7a;             /* Tom mais claro */
+  --color-light-gray: #f1f3f5;
+  --color-light-blue: #e7f5ff;
+  --color-dropdown-border: #ced4da;
+  --color-dropdown-hover: #e9ecef;
+
+  background-color: var(--color-white);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.formContainerHeader {
+  display: flex;
+  background-color: var(--color-button-bg);
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.formContainerHeader h1 {
+  color: var(--color-white);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* SEÇÕES E LABELS */
+.section {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.section:last-child {
+  border-bottom: none;
+}
+
+.sectionTitle {
+  color: var(--color-button-bg);
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.label {
+  display: block;
+  color: var(--color-black);
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.uploadLabel {
+  display: block;
+  color: var(--color-subtle-text);
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+/* INPUTS */
+.inputField {
+  width: 50%;
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--color-dropdown-border);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.2s;
+  background-color: var(--color-input-bg);
+  color: var(--color-black);
+  box-sizing: border-box;
+}
+
+.inputField:focus {
+  border-color: var(--color-primary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(10, 35, 87, 0.15);
+}
+
+.inputField::placeholder {
+  color: var(--color-placeholder);
+}
+
+/* DROPDOWN */
+.dropdownContainer {
+  position: relative;
+  width: 50%;
+}
+
+.dropdownHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-dropdown-border);
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: var(--color-white);
+  transition: all 0.2s;
+  font-size: 1rem;
+  color: var(--color-button-bg);
+}
+
+.dropdownHeader.active {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(10, 35, 87, 0.2);
+}
+
+.dropdownIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: var(--color-button-bg);
+  transition: transform 0.3s;
+}
+
+.dropdownHeader.active .dropdownIcon {
+  fill: var(--color-primary);
+}
+
+.rotate {
+  transform: rotate(180deg);
+}
+
+.dropdownOptions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-dropdown-border);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  z-index: 10;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 0.25rem;
+}
+
+.dropdownOption {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 0.95rem;
+  color: var(--color-button-bg);
+}
+
+.dropdownOption:hover {
+  background-color: var(--color-light-blue);
+  color: var(--color-button-bg);
+}
+
+.dropdownOption.selected {
+  background-color: var(--color-button-bg);
+  color: var(--color-white);
+  font-weight: 500;
+}
+
+/* UPLOAD DE IMAGENS */
+.iconAndBanner {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.imageUploadGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.btnBanner,
+.btnIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  position: relative;
+  border: 2px dashed var(--color-dropdown-border);
+  background-color: var(--color-light-gray);
+  border-radius: 8px;
+}
+
+/* Remove a borda quando tem imagem */
+.btnBanner.hasImage,
+.btnIcon.hasImage {
+  border: none;
+}
+
+.btnBanner {
+  width: 250px;
+  height: 100px;
+}
+
+.btnIcon {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.btnBanner:hover,
+.btnIcon:hover {
+  border-color: var(--color-primary);
+  background-color: var(--color-light-blue);
+}
+
+.uploadPlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: var(--color-subtle-text);
+  font-size: 0.8rem;
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.plusIcon {
+  color: var(--color-subtle-text);
+  font-size: 1.5rem;
+}
+
+.btnBanner:hover .plusIcon,
+.btnIcon:hover .plusIcon,
+.btnBanner:hover .uploadPlaceholder,
+.btnIcon:hover .uploadPlaceholder {
+  color: var(--color-primary);
+}
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* GALERIA */
+.galleryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.addGalleryButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--color-button-bg);
+  color: var(--color-white);
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.addGalleryButton:hover {
+  background-color: var(--color-button-hover);
+}
+
+.galeryContainer {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  overflow-x: auto;
+  background-color: var(--color-light-gray);
+  border-radius: 8px;
+  min-height: 120px;
+}
+
+/* Placeholder para galeria vazia */
+.emptyGallery {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 120px;
+  color: var(--color-subtle-text);
+  text-align: center;
+  padding: 1rem;
+}
+
+.emptyGalleryHint {
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  opacity: 0.7;
+}
+
+/* Imagens da galeria */
+.galeryContainer .imageWrapper {
+  position: relative;
+  width: 180px;
+  height: 100px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.imageOverlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border-bottom-left-radius: 6px;
+}
+
+.editButton,
+.deleteButton {
+  background: transparent;
+  border: none;
+  color: var(--color-white);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.editButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.deleteButton:hover {
+  background: rgba(229, 57, 53, 0.7);
+}
+
+/* SCROLLBAR PERSONALIZADA */
+.galeryContainer::-webkit-scrollbar {
+  height: 8px;
+}
+
+.galeryContainer::-webkit-scrollbar-track {
+  background: var(--color-light-gray);
+  border-radius: 4px;
+}
+
+.galeryContainer::-webkit-scrollbar-thumb {
+  background: var(--color-dropdown-border);
+  border-radius: 4px;
+}
+
+.galeryContainer::-webkit-scrollbar-thumb:hover {
+  background: var(--color-subtle-text);
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 768px) {
+  .iconAndBanner {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .galleryHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .addGalleryButton {
+    align-self: stretch;
+    justify-content: center;
+  }
+}

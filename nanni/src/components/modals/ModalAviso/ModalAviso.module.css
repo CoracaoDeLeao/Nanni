@@ -1,4 +1,4 @@
-:root {
+.overlay {
   --color-overlay-bg: rgba(0, 0, 0, 0.5);
   --color-white: #ffffff;
   --color-black: #000000;
@@ -10,9 +10,7 @@
   --color-secondary-hover: #e5e7eb;
   --color-primary: #071934;
   --color-primary-hover: #0c2b5a;
-}
 
-.overlay {
   position: fixed;
   inset: 0;
   background-color: var(--color-overlay-bg);
