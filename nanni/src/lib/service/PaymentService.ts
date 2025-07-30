@@ -104,7 +104,7 @@ export async function getCompleteSale(saleId: string) {
             id: item.productRef.id,
             ...productSnap.data(),
           };
-        })
+        }),
       );
 
       return {

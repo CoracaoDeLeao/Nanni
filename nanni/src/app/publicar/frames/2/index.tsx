@@ -6,9 +6,13 @@ interface Frame2Props {
   text: string;
   setText: (text: string) => void;
   textTranslations: { id: string; language: string }[];
-  setTextTranslations: (translations: { id: string; language: string }[]) => void;
+  setTextTranslations: (
+    translations: { id: string; language: string }[],
+  ) => void;
   audioTranslations: { id: string; language: string }[];
-  setAudioTranslations: (translations: { id: string; language: string }[]) => void;
+  setAudioTranslations: (
+    translations: { id: string; language: string }[],
+  ) => void;
 }
 
 export default function Frame2({
@@ -17,9 +21,8 @@ export default function Frame2({
   textTranslations,
   setTextTranslations,
   audioTranslations,
-  setAudioTranslations
+  setAudioTranslations,
 }: Frame2Props) {
-
   const [newLanguage, setNewLanguage] = useState("");
   const [activeInput, setActiveInput] = useState<{
     type: "text" | "audio";

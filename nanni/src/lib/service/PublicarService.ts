@@ -4,10 +4,10 @@ import axios from "axios";
 import { COLLECTIONS } from "@/constants/FirebaseCollections";
 
 interface GameVersion {
-  name: string;
-  size: number;
-  version: string;
-  isDemo: boolean;
+  nome: string;
+  tamanho: number;
+  versao: string;
+  eDemo: boolean;
 }
 
 // Função para fazer upload de imagens para o ImageBB
@@ -19,7 +19,7 @@ const uploadImageToImageBB = async (file: File): Promise<string> => {
   });
 
   const response = await axios.post("/api/upload", {
-    imageBase64: base64
+    imageBase64: base64,
   });
 
   return response.data.link;
@@ -48,29 +48,33 @@ export const publishGame = async (gameData: {
   try {
     // 1. Upload de imagens para o ImageBB
     const [bannerUrl, iconUrl, ...galleryUrls] = await Promise.all([
-      gameData.bannerImage ? uploadImageToImageBB(gameData.bannerImage) : Promise.resolve(""),
-      gameData.iconImage ? uploadImageToImageBB(gameData.iconImage) : Promise.resolve(""),
-      ...gameData.images.map(img => uploadImageToImageBB(img.file))
+      gameData.bannerImage
+        ? uploadImageToImageBB(gameData.bannerImage)
+        : Promise.resolve(""),
+      gameData.iconImage
+        ? uploadImageToImageBB(gameData.iconImage)
+        : Promise.resolve(""),
+      ...gameData.images.map((img) => uploadImageToImageBB(img.file)),
     ]);
 
     // 2. Preparar as versões (apenas metadados)
     const versoes: GameVersion[] = [];
-    
+
     if (gameData.principalFile) {
       versoes.push({
-        name: gameData.principalFile.name,
-        size: gameData.principalFile.size,
-        version: gameData.principalFile.version,
-        isDemo: false
+        nome: gameData.principalFile.name,
+        tamanho: gameData.principalFile.size,
+        versao: gameData.principalFile.version,
+        eDemo: false,
       });
     }
 
     if (gameData.demoFile) {
       versoes.push({
-        name: gameData.demoFile.name,
-        size: gameData.demoFile.size,
-        version: gameData.demoFile.version,
-        isDemo: true
+        nome: gameData.demoFile.name,
+        tamanho: gameData.demoFile.size,
+        versao: gameData.demoFile.version,
+        eDemo: true,
       });
     }
 
@@ -79,7 +83,7 @@ export const publishGame = async (gameData: {
       nome: gameData.nomeJogo,
       banner: bannerUrl,
       icone: iconUrl,
-      galeria: galleryUrls.map(url => ({ url })),
+      galeria: galleryUrls.map((url) => ({ url })),
       statusDev: gameData.devStatus,
       classificacaoIndicativa: gameData.ageRating,
       sobre: gameData.descrição,
@@ -91,13 +95,12 @@ export const publishGame = async (gameData: {
       plataforma: gameData.plataforma,
       versoes,
       preco: gameData.isFree ? "Gratis" : gameData.price,
-      data: serverTimestamp()
+      data: serverTimestamp(),
     };
 
     // Adicionar ao Firestore
     const docRef = await addDoc(collection(db, COLLECTIONS.JOGOS), gameDoc);
     return docRef.id;
-
   } catch (error) {
     console.error("Erro ao publicar jogo:", error);
     throw new Error("Falha na publicação do jogo");

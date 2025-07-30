@@ -14,7 +14,7 @@ export const saveReporte = async (
   reporteData: {
     tipoProblema: string;
     razao: string;
-  }
+  },
 ) => {
   try {
     // Referência ao documento pai
@@ -26,7 +26,7 @@ export const saveReporte = async (
     // Referência à subcoleção dentro do documento pai
     const reportesCollectionRef = collection(
       parentDocRef,
-      COLLECTIONS.SUB_REPORTES
+      COLLECTIONS.SUB_REPORTES,
     );
 
     // Adiciona documento com timestamp do servidor
@@ -55,7 +55,10 @@ export const getReportesByJogoID = async (jogoId: string) => {
     const jogoDocRef = doc(db, COLLECTIONS.JOGOS, jogoId);
 
     // Referência à subcoleção de reportes
-    const reportesCollectionRef = collection(jogoDocRef, COLLECTIONS.SUB_REPORTES);
+    const reportesCollectionRef = collection(
+      jogoDocRef,
+      COLLECTIONS.SUB_REPORTES,
+    );
 
     // Buscar todos os documentos da subcoleção
     const reportesSnapshot = await getDocs(reportesCollectionRef);
@@ -69,7 +72,7 @@ export const getReportesByJogoID = async (jogoId: string) => {
           id: reporteDoc.id,
           ...reporteData,
         };
-      })
+      }),
     );
 
     return {

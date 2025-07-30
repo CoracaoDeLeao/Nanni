@@ -34,7 +34,9 @@ export default function Frame3({
   const [newTag, setNewTag] = useState("");
 
   // Estado interno inicializado com o valor da prop ou o primeiro item do array
-  const [selectedPlatform, setSelectedPlatform] = useState(plataformaRecomendada[0]);
+  const [selectedPlatform, setSelectedPlatform] = useState(
+    plataformaRecomendada[0],
+  );
 
   const handlePlatformChange = (platform: string) => {
     setSelectedPlatform(platform);

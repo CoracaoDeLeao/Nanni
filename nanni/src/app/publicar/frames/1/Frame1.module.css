@@ -9,10 +9,10 @@
   --color-disabled: #9ca3af;
   --color-input-bg: #f8f9fa;
   --color-placeholder: #a1a1a1;
-  --color-button-bg: #071934;         /* Cor principal */
-  --color-button-hover: #0c2b5a;      /* Tom mais escuro */
-  --color-primary: #0a2357;           /* Tom médio */
-  --color-light: #1a3b7a;             /* Tom mais claro */
+  --color-button-bg: #071934; /* Cor principal */
+  --color-button-hover: #0c2b5a; /* Tom mais escuro */
+  --color-primary: #0a2357; /* Tom médio */
+  --color-light: #1a3b7a; /* Tom mais claro */
   --color-light-gray: #f1f3f5;
   --color-light-blue: #e7f5ff;
   --color-dropdown-border: #ced4da;
@@ -145,7 +145,7 @@
   background-color: var(--color-white);
   border: 1px solid var(--color-dropdown-border);
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   z-index: 10;
   max-height: 200px;
   overflow-y: auto;
@@ -376,13 +376,13 @@
     flex-direction: column;
     align-items: center;
   }
-  
+
   .galleryHeader {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }
-  
+
   .addGalleryButton {
     align-self: stretch;
     justify-content: center;

@@ -36,7 +36,6 @@ export default function LoginPage() {
 
     if (result.success) {
       // console.log("Venda realizada com sucesso!", result.saleId);
-
       // Obter detalhes completos da venda
       // const completeSale = await getCompleteSale(result.saleId as string);
       // console.log("Detalhes da venda:", completeSale);
@@ -82,7 +81,7 @@ export default function LoginPage() {
 
         <hr />
 
-        <Sidebar/>
+        <Sidebar />
       </main>
     </div>
   );

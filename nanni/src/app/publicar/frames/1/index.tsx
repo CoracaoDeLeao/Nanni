@@ -51,7 +51,7 @@ export default function Frame1({
 
   const handleImageUpload = (
     e: ChangeEvent<HTMLInputElement>,
-    setImage: (image: { url: string; file: File }) => void
+    setImage: (image: { url: string; file: File }) => void,
   ) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -134,9 +134,7 @@ export default function Frame1({
 
       <div className={styles.section}>
         <label className={styles.label}>Classificação Indicativa</label>
-        <AgeSelector
-          onChange={onAgeRatingSelected}
-        />
+        <AgeSelector onChange={onAgeRatingSelected} />
       </div>
 
       <div className={styles.section}>

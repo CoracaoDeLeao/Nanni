@@ -111,7 +111,7 @@ export default function Frame4({
   // Atualiza versão quando input muda
   const handleVersionChange = (
     e: ChangeEvent<HTMLInputElement>,
-    isPrincipal: boolean
+    isPrincipal: boolean,
   ) => {
     const newVersion = e.target.value;
     if (isPrincipal) {
@@ -154,8 +154,8 @@ export default function Frame4({
         {principalFile ? (
           <div className={styles.fileInfo}>
             <p>
-              {principalFile.name} | Tamanho: {principalFile.formattedSize} | Versão:{" "}
-              {principalFile.version}
+              {principalFile.name} | Tamanho: {principalFile.formattedSize} |
+              Versão: {principalFile.version}
             </p>
             <div className={styles.versionInputContainer}>
               <label>Atualizar versão:</label>

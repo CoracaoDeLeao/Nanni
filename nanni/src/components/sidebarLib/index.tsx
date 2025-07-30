@@ -19,7 +19,7 @@ const Sidebar = () => {
   ];
 
   const filteredGames = games.filter((game) =>
-    game.name.toLowerCase().includes(searchTerm.toLowerCase())
+    game.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (

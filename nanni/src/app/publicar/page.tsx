@@ -127,37 +127,38 @@ export default function PublicarJogo() {
         nomeJogo,
         bannerImage: bannerImage?.file || null,
         iconImage: iconImage?.file || null,
-        images: images.map(img => ({ file: img.file })),
+        images: images.map((img) => ({ file: img.file })),
         devStatus,
         ageRating,
         descrição: text,
-        textTranslations: textTranslations.map(t => ({ lingua: t.language })),
-        audioTranslations: audioTranslations.map(a => ({ lingua: a.language })),
+        textTranslations: textTranslations.map((t) => ({ lingua: t.language })),
+        audioTranslations: audioTranslations.map((a) => ({
+          lingua: a.language,
+        })),
         sensitiveContents,
         generos: genres,
         tags,
         plataforma,
-        principalFile: principalFile 
-          ? { 
-              name: principalFile.name, 
-              size: principalFile.size, 
-              version: principalFile.version 
-            } 
+        principalFile: principalFile
+          ? {
+              name: principalFile.name,
+              size: principalFile.size,
+              version: principalFile.version,
+            }
           : null,
-        demoFile: demoFile 
-          ? { 
-              name: demoFile.name, 
-              size: demoFile.size, 
-              version: demoFile.version 
-            } 
+        demoFile: demoFile
+          ? {
+              name: demoFile.name,
+              size: demoFile.size,
+              version: demoFile.version,
+            }
           : null,
         isFree,
-        price: currencyValue
+        price: currencyValue,
       };
 
       await publishGame(gameData);
       alert("Jogo publicado com sucesso!");
-
     } catch (error) {
       console.error("Erro na publicação:", error);
       alert("Erro ao publicar o jogo. Por favor, tente novamente.");
