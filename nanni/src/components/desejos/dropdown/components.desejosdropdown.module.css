@@ -1,0 +1,49 @@
+.boxButton {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  border: 0;
+  gap: 5px;
+  height: 100%;
+  background-color: transparent;
+}
+
+.boxButton > p {
+  font-size: 14px;
+}
+
+.boxButton__desc {
+  font-weight: bold;
+  color: var(--p3);
+}
+
+.boxListOption {
+  width: 100px;
+  border-radius: 5px;
+  padding: 10px 5px;
+  background-color: var(--foreground);
+}
+
+.boxOption {
+  width: 100%;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 10px;
+}
+
+.boxOption > p {
+  text-align: center;
+  font-size: 14px;
+  color: var(--white);
+}
+
+.boxOption--selected > p {
+  font-weight: bold;
+  color: var(--p3);
+}
+
+.boxOption--selected > svg {
+  color: var(--p3);
+  fill: var(--p3);
+}

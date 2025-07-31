@@ -1,5 +1,25 @@
-.searchbar {
+.offline {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.offline > p {
+  padding-top: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--foreground);
+}
+
+.offline > svg {
+  fill: var(--foreground);
+}
+
+.filterbar {
+  display: flex;
+  justify-content: space-between;
   padding: 10px 0;
+  padding-right: 10px;
   margin-bottom: 15px;
   border-bottom: 2px solid var(--p5);
   border-radius: 2px;

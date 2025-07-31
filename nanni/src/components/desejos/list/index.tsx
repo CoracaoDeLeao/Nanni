@@ -3,13 +3,16 @@
 import styles from "@/styles/desejos.module.css";
 import { DesejosItem } from "../item";
 import { ItemDesejo } from "@/types/ItemDesejo";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   deleteDesejo,
   fetchListaDesejo,
 } from "@/lib/service/ListaDesejoService";
 import { useAuth } from "@/context/AuthContextProvider";
 import { fetchJogos, getAvaliacoes } from "@/lib/service/JogoService";
+import { DesejosSearchBar } from "../searchbar";
+import { DesejosDropdown, DesejosDropdownItemProps } from "../dropdown";
+import { BsFillPersonXFill } from "react-icons/bs";
 
 export function DesejosList() {
   const { user } = useAuth();
@@ -19,15 +22,25 @@ export function DesejosList() {
   });
 
   const [listDesejos, setListDesejos] = useState<ItemDesejo[]>([]);
-  const [filteredListDesejos, setFilteredListDesejos] = useState<ItemDesejo[]>(
-    [],
-  );
   const [query, setQuery] = useState<string>("");
+  const [typeFilter, setTypeFilter] = useState<DesejosDropdownItemProps>({
+    selected: 0,
+    items: [
+      {
+        id: 0,
+        titulo: "A-Z",
+      },
+      {
+        id: 1,
+        titulo: "Z-A",
+      },
+    ],
+  });
 
   // FAZ O FETCH DOS DADOS DE LISTA DE DESEJOS DO USUÁRIO
   useEffect(() => {
     async function run() {
-      if (user && user.id) {
+      if (!(user && user.id)) {
         return;
       }
 
@@ -59,17 +72,16 @@ export function DesejosList() {
             }),
           );
 
-          setLoadingState((prev) => ({
-            ...prev,
-            loading: false,
-          }));
-
           const filteredObj = obj.filter((item): item is ItemDesejo =>
             Boolean(item),
           );
 
           setListDesejos(filteredObj);
-          setFilteredListDesejos(filteredObj);
+
+          setLoadingState((prev) => ({
+            ...prev,
+            loading: false,
+          }));
         }
       } else {
         setLoadingState((prev) => ({
@@ -84,25 +96,22 @@ export function DesejosList() {
   }, [user]);
 
   // FUNÇÃO DE QUERY
-  useEffect(() => {
-    if (listDesejos.length > 0) {
-      const handler = setTimeout(() => {
-        const q = query.toLowerCase().trim();
+  const filteredListDesejos = useMemo(() => {
+    const q = query.toLowerCase().trim();
 
-        if (q === "") {
-          setFilteredListDesejos(listDesejos);
-        } else {
-          setFilteredListDesejos(
-            listDesejos.filter((item) =>
-              item.jogo.nome.toLowerCase().includes(q),
-            ),
+    let filtered =
+      q === ""
+        ? listDesejos
+        : listDesejos.filter((item) =>
+            item.jogo.nome.toLowerCase().includes(q),
           );
-        }
-      }, 500);
 
-      return () => clearTimeout(handler);
-    }
-  }, [query, listDesejos]);
+    filtered = [...filtered].sort((a, b) => {
+      return a.jogo.nome.localeCompare(b);
+    });
+
+    return typeFilter.selected === 1 ? filtered.reverse() : filtered;
+  }, [query, typeFilter.selected, listDesejos]);
 
   // > É redireciado para comprar item
   async function handleComprar(des_id: string) {
@@ -111,26 +120,27 @@ export function DesejosList() {
 
   // > Deleta item
   async function handleDelete(des_id: string) {
-    // if(user && user.id) {
-    const r = await deleteDesejo("CJhHoFM6l3NhK3xfqL2U4yK9bXR2", des_id);
+    const r = await deleteDesejo(user.id, des_id);
 
     if (r) {
       setListDesejos((prev) => prev.filter((item) => item.id !== des_id));
     }
-    // }
   }
 
   if (!user) {
-    return <p>Usuário não encontrado</p>;
+    return (
+      <span className={styles["offline"]}>
+        <BsFillPersonXFill size={25} />
+        <p>Usuário não encontrado.</p>
+      </span>
+    );
   }
 
   return !loadingState.loading ? (
     <>
-      <div className={styles["searchbar"]}>
-        <input
-          placeholder={"Buscar por nome"}
-          onChange={(e) => setQuery(e.target.value)}
-        />
+      <div className={styles["filterbar"]}>
+        <DesejosSearchBar setQuery={setQuery} />
+        <DesejosDropdown listItems={typeFilter} setListItems={setTypeFilter} />
       </div>
       <div className={styles["lista-desejos"]}>
         {filteredListDesejos.length > 0 ? (
