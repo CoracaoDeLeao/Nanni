@@ -1,143 +1,143 @@
 .main {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
 .div {
-    max-width: var(--screen-max-width);
-    width: 100%;
-    padding: 20px;
+  max-width: var(--screen-max-width);
+  width: 100%;
+  padding: 20px;
 }
 
 .jogo-titulo-div {
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 10px 20px;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px 20px;
 }
 
 .jogo-titulo-icone {
-    z-index: 1;
-    position: absolute;
-    border-radius: 70px;
-    top: -30;
-    background-color: var(--foreground);
+  z-index: 1;
+  position: absolute;
+  border-radius: 70px;
+  top: -30;
+  background-color: var(--foreground);
 }
 
 .jogo-principal {
-    display: flex;
-    width: 100%;
+  display: flex;
+  width: 100%;
 }
 
 .jogo-titulo {
-    flex: 1;
-    display: flex;
-    flex-direction: row;
-    align-items: start;
-    gap: 10px;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  gap: 10px;
 }
 
 .jogo-titulo-texto {
-    font-weight: bold;
-    font-size: 28;
+  font-weight: bold;
+  font-size: 28;
 }
 
 .jogo-titulo-status {
-    color: var(--white);
-    padding: 5px 15px;
-    margin-top: 7px;
-    border-radius: 10px;
+  color: var(--white);
+  padding: 5px 15px;
+  margin-top: 7px;
+  border-radius: 10px;
 }
 
 .jogo-botoes {
-    display: inline-flex;
+  display: inline-flex;
 }
 
 .jogos-botoes-avaliacao {
-    color: var(--foreground);
-    font-weight: bold;
-    margin-top: 2px;
-    padding: 5px 15px;
+  color: var(--foreground);
+  font-weight: bold;
+  margin-top: 2px;
+  padding: 5px 15px;
 }
 
 .jogos-botoes-avaliacao:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 .jogo-avaliacao {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    padding-top: 5px;
-    padding-left: 2px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding-top: 5px;
+  padding-left: 2px;
 }
 
 .jogo-avaliacao > p {
-    font-size: 20px;
-    font-weight: var(--semi-bold);
-    letter-spacing: 2px;
-    padding-top: 3px;
-    color: var(--foreground);
+  font-size: 20px;
+  font-weight: var(--semi-bold);
+  letter-spacing: 2px;
+  padding-top: 3px;
+  color: var(--foreground);
 }
 
 .jogo-preco {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .jogo-preco-button {
-    display: flex;
-    align-items: center;
-    gap: 50px;
-    font-weight: bold;
-    font-size: 16px;
-    text-align: start;
-    padding: 12px 8px;
-    border-radius: 10px;
-    user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 50px;
+  font-weight: bold;
+  font-size: 16px;
+  text-align: start;
+  padding: 12px 8px;
+  border-radius: 10px;
+  user-select: none;
 }
 
 .jogo-preco-button > p {
-    flex: 1;
-    padding-top: 3px;
-    padding-left: 20px;
-    color: var(--white);
+  flex: 1;
+  padding-top: 3px;
+  padding-left: 20px;
+  color: var(--white);
 }
 
 .jogo-preco-principal {
-    color: var(--white);
-    background-color: #019934;
+  color: var(--white);
+  background-color: #019934;
 }
 
 .jogo-preco-principal-icone {
-    width: 20;
-    height: 20;
-    fill: var(--white);
+  width: 20;
+  height: 20;
+  fill: var(--white);
 }
 
 .jogo-preco-demo {
-    color: var(--foreground);
+  color: var(--foreground);
 }
 
 .jogo-preco-demo:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 .jogo-preco-demo-icone {
-    width: 20;
-    height: 20;
-    fill: var(--foreground);
+  width: 20;
+  height: 20;
+  fill: var(--foreground);
 }
 
 .jogo-preco-demo > p {
-    padding-left: 20px;
-    color: var(--foreground);
+  padding-left: 20px;
+  color: var(--foreground);
 }
 
-@media screen and (max-width: 744px){
-    .jogo-titulo {
-        flex-direction: column;
-    }
+@media screen and (max-width: 744px) {
+  .jogo-titulo {
+    flex-direction: column;
+  }
 }

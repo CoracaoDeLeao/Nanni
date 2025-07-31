@@ -2,7 +2,7 @@ import Image from "next/image";
 import styles from "./components.jogo.item.module.css";
 import { JogoItemProps } from "@/types/JogoItemProps";
 
-export function JogoItem(props: {data: JogoItemProps}) {
+export function JogoItem(props: { data: JogoItemProps }) {
   const item = props.data;
   const listTags = item.tags.join(", ");
   const avaliacaoNota = item.avaliacao + "/10";

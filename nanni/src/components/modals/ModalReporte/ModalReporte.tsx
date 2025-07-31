@@ -73,14 +73,13 @@ const ModalReporte: React.FC<ReportModalProps> = ({
 
       // Animação de sucesso
       setIsSuccess(true);
-      
+
       // Resetar estados e fechar modal após 1.5 segundos
       setTimeout(() => {
         setRazao("");
         setIsSuccess(false);
         onClose();
       }, 1500);
-
     } catch (err: unknown) {
       console.error("Erro ao enviar reporte:", err);
 
@@ -89,7 +88,6 @@ const ModalReporte: React.FC<ReportModalProps> = ({
       } else {
         setError("Ocorreu um erro. Tente novamente mais tarde.");
       }
-
     } finally {
       setIsSubmitting(false);
     }

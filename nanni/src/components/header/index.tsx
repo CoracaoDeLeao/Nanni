@@ -5,7 +5,9 @@ import { HeaderPerfil } from "./_perfil";
 
 export function Header() {
   return (
-    <header className={`${styles["header"]} ${styles["padding-horizontal-global"]}`}>
+    <header
+      className={`${styles["header"]} ${styles["padding-horizontal-global"]}`}
+    >
       <div className={styles["header-superior"]}>
         <Link href="/">
           <Image

@@ -1,0 +1,84 @@
+.text-color {
+  color: var(--white);
+}
+
+.desejo-item {
+  display: flex;
+  padding: 20px;
+  gap: 30px;
+  height: 140px;
+  background-color: var(--foreground);
+}
+
+.desejo-item__imagem {
+  position: relative;
+  width: auto;
+  height: 100%;
+  background-color: var(--p5);
+}
+
+.desejo-item__titulos {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.desejo-item__titulos-nome {
+  font-size: 22px;
+}
+
+.desejo-item__titulos-avaliacao {
+  display: flex;
+  gap: 5px;
+  font-size: 16px;
+}
+
+.desejo-item__titulos-date {
+  font-size: 12px;
+}
+
+.desejo-item__button {
+  padding: 0;
+  margin: 0;
+  align-self: flex-end;
+}
+
+.desejo-item__button__comprar {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  gap: 10px;
+  background-color: rgba(0, 0, 0, 20%);
+}
+
+.desejo-item__button__comprar-btn {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  gap: 10px;
+  background-color: #019934;
+  border-radius: 5px;
+  color: white;
+}
+
+.desejo-item__button__comprar-btn > p {
+  padding-top: 2px;
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+}
+
+.desejo-item__button__comprar-remover {
+  display: flex;
+  gap: 5px;
+  margin-top: 15px;
+  color: red;
+}
+
+.desejo-item__button__comprar-remover > p {
+  font-size: 14px;
+  font-weight: var(--semi-bold);
+  color: red;
+}

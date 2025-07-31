@@ -18,10 +18,10 @@
   padding: 10px 30px;
   cursor: pointer;
   color: var(--black);
-}   
+}
 
 .react-tabs__tab:first-child {
-    border-left: none;
+  border-left: none;
 }
 
 .react-tabs__tab--selected {
@@ -36,7 +36,7 @@
 }
 
 .react-tabs__tab:focus:after {
-  content: '';
+  content: "";
   position: absolute;
   height: 5px;
   left: -4px;
@@ -89,29 +89,29 @@
 }
 
 .sobre-div__outros {
-    flex: 1;
-    align-self: flex-start;
-    border: 1px solid var(--black);
-    border-bottom: none;
-    border-top: none;
-    padding: 0 10px 20px 10px;
-    box-shadow: 0 4px 0 0 var(--black);
+  flex: 1;
+  align-self: flex-start;
+  border: 1px solid var(--black);
+  border-bottom: none;
+  border-top: none;
+  padding: 0 10px 20px 10px;
+  box-shadow: 0 4px 0 0 var(--black);
 }
 
 /* _traducoes */
 table {
-    color: var(--black);
-    width: 100%;
-    table-layout: fixed;
+  color: var(--black);
+  width: 100%;
+  table-layout: fixed;
 }
 
 th {
-    text-align: start;
-    font-weight: normal;
+  text-align: start;
+  font-weight: normal;
 }
 
 tbody {
-    width: 100%;
+  width: 100%;
 }
 
 td {
@@ -119,13 +119,13 @@ td {
 }
 
 span {
-    display: inline-flex;
-    gap: 4px;
-    padding: 10px 0;
+  display: inline-flex;
+  gap: 4px;
+  padding: 10px 0;
 }
 
 span > p {
-    padding-top: 4px;
+  padding-top: 4px;
 }
 
 h3 {

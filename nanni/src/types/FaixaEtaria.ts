@@ -1,11 +1,11 @@
 export type faixaEtaria = {
-  titulo: string,
-  link_icone: string,
-  fill_color: string,
-}
+  titulo: string;
+  link_icone: string;
+  fill_color: string;
+};
 
 const _faixasTitulos: Record<string, string> = {
-  "L": "Livre para todos os públicos",
+  L: "Livre para todos os públicos",
   "10": "Não recomendado para menores de 10 anos",
   "12": "Não recomendado para menores de 12 anos",
   "14": "Não recomendado para menores de 14 anos",
@@ -14,7 +14,7 @@ const _faixasTitulos: Record<string, string> = {
 };
 
 const _faixasCores: Record<string, string> = {
-  "L": "#00a550",
+  L: "#00a550",
   "10": "#0096d9",
   "12": "#ffcc03",
   "14": "#f5821f",
@@ -22,15 +22,14 @@ const _faixasCores: Record<string, string> = {
   "18": "#000000",
 };
 
-
 export function getFaixaEtaria({
   clsIndicativa,
-} : {
-  clsIndicativa: string,
+}: {
+  clsIndicativa: string;
 }): faixaEtaria {
   return {
     titulo: _faixasTitulos[clsIndicativa],
     link_icone: `/faixa/${clsIndicativa}.svg`,
     fill_color: _faixasCores[clsIndicativa],
   };
-} 
+}

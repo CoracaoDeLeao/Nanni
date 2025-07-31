@@ -4,8 +4,8 @@ import { COLLECTIONS } from "@/constants/FirebaseCollections";
 
 type FirestoreUserData = {
   cargo?: boolean;
-  nome?: string,
-  avatar?: string,
+  nome?: string;
+  avatar?: string;
   // outros campos que você espera do Firestore
 };
 

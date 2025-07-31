@@ -1,5 +1,6 @@
 export const COLLECTIONS = {
   USERS: "usuarios",
+  LISTA_DESEJOS: "listaDesejos",
   JOGOS: "jogos",
   AVALIACOES: "avaliacoes",
   REPORTES: "reportes",
