@@ -1,8 +1,11 @@
 "use client";
+
+
+import styles from "./JogosTabsTraducoes.module.css";
 import Image from "next/image";
 import { JSX, useEffect, useState } from "react";
 
-export function JogosTabs_traducoes({
+export function JogosTabsTraducoes({
   texto,
   audio,
 }: {
@@ -31,8 +34,8 @@ export function JogosTabs_traducoes({
           for (let i = 0; i < traducoes.length; i++) {
             tmpElements.push(
               <tr key={i}>
-                <td>{texto[i] ? traducaoCell(paises.get(texto[i])) : ""}</td>
-                <td>{audio[i] ? traducaoCell(paises.get(audio[i])) : ""}</td>
+                <td className={styles["td"]}>{texto[i] ? traducaoCell(paises.get(texto[i])) : ""}</td>
+                <td className={styles["td"]}>{audio[i] ? traducaoCell(paises.get(audio[i])) : ""}</td>
               </tr>,
             );
           }
@@ -44,8 +47,8 @@ export function JogosTabs_traducoes({
 
       setElements([
         <tr key={0}>
-          <td>Não Informado</td>
-          <td>Não Informado</td>
+          <td className={styles["td"]}>Não Informado</td>
+          <td className={styles["td"]}>Não Informado</td>
         </tr>,
       ]);
     }
@@ -54,21 +57,23 @@ export function JogosTabs_traducoes({
   }, [texto, audio]);
 
   return (
-    <table>
+    <table className={styles["table"]}>
       <thead>
         <tr>
-          <th>Texto</th>
-          <th>Aúdio</th>
+          <th className={styles["th"]}>Texto</th>
+          <th className={styles["th"]}>Aúdio</th>
         </tr>
       </thead>
-      <tbody>{elements}</tbody>
+      <tbody className={styles["tbody"]}>
+        {elements}
+      </tbody>
     </table>
   );
 }
 
 function traducaoCell({ nome, link_svg }: PaisesProps) {
   return (
-    <span>
+    <span className={styles["span"]}>
       <Image
         alt={`Bandeira do ${nome}`}
         src={link_svg}

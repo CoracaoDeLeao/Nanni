@@ -1,0 +1,28 @@
+.table {
+  color: var(--black);
+  width: 100%;
+  table-layout: fixed;
+}
+
+.th {
+  text-align: start;
+  font-weight: normal;
+}
+
+.tbody {
+  width: 100%;
+}
+
+.td {
+  border-bottom: solid 1px var(--p5);
+}
+
+.span {
+  display: inline-flex;
+  gap: 4px;
+  padding: 10px 0;
+}
+
+.span > p {
+  padding-top: 4px;
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "./components.desejosdropdown.module.css";
+import styles from "./DesejosDropdown.module.css";
 import {
   Listbox,
   ListboxButton,

@@ -1,0 +1,52 @@
+.container {
+    align-items: center;
+}
+
+.container-slider {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 4px 0;
+    width: 100%;
+}
+
+.container-slider > p {
+    font-size: 14px;
+}
+
+.slider-track {
+    height: 6px;
+    width: 100%;
+}
+
+.slider-track__children {
+    align-self: center;
+    height: 5px;
+    width: 100%;
+    border-radius: 4px;
+}
+
+.slider-thumb {
+    height: 20px;
+    width: 20px;
+    border-radius: 72px;
+    background-color: var(--p5);
+}
+
+.slider-thumb--drag {
+    background-color: var(--p4);
+}
+
+.label {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    font-size: 14px;
+}
+
+.label > p {
+    font-weight: bold;
+    color: var(--p5);
+}

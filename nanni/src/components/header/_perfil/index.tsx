@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import styles from "../components.header.carrossel.module.css";
+import styles from "../Header.module.css";
 
 import Image from "next/image";
 import { useAuth } from "@/context/AuthContextProvider";

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import styles from "./components.header.carrossel.module.css";
+import styles from "./Header.module.css";
 import { HeaderPerfil } from "./_perfil";
 
 export function Header() {

@@ -13,6 +13,7 @@
   --white: #fff;
   --black: #000;
   --p3: #1d5db5;
+  --p4: #5D90D6;
   --p5: #b484ac;
   --shadow-color: #98a9e3;
 }
@@ -57,6 +58,9 @@ h3 {
   max-width: 100%;
   margin: calc(var(--padding-horizontal-global) / 2)
     var(--padding-horizontal-global);
+}
+
+.g-padding {
   padding: var(--padding-horizontal-global);
 }
 

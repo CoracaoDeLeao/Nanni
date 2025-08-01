@@ -10,7 +10,7 @@ import { JogoProps } from "@/types/JogoProps";
 import { BsStarFill } from "react-icons/bs";
 import { colorStatusDev } from "@/components/jogos/cores_status";
 
-export default async function DetailJogo({
+export default async function DetailJogoPage({
   params,
 }: {
   params: Promise<{ id: string }>;

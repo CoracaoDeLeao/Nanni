@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import styles from "./components.desejositem.module.css";
+import styles from "./DesejosItem.module.css";
 import { ItemDesejo } from "@/types/ItemDesejo";
 import { BsStarFill } from "react-icons/bs";
 import { IoCartOutline, IoTrashOutline } from "react-icons/io5";

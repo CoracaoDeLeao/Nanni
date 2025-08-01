@@ -1,8 +1,10 @@
 "use client";
 
+
+import "./JogosTabs.react-tabs.css";
+import styles from "./JogosTabs.module.css";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
-import "./components.jogos.tabs.css";
-import { JogosTabs_traducoes } from "./_traducoes";
+import { JogosTabsTraducoes } from "./_traducoes";
 import { JogosClassificaoIndicativa } from "../classificao_indicativa";
 
 export function JogosTabs({
@@ -33,14 +35,14 @@ export function JogosTabs({
       </TabList>
 
       <TabPanel>
-        <div className={"sobre-div"}>
-          <div className={"sobre-div__descricao"}>
+        <div className={styles["sobre-div"]}>
+          <div className={styles["sobre-div__descricao"]}>
             <p>{params.sobre}</p>
-            <div className={"sobre-div__extra"}>
+            <div className={styles["sobre-div__extra"]}>
               <JogosClassificaoIndicativa
                 clsIndicativa={params.classificacaoIndicativa}
               />
-              <div className={"sobre-div__extra-info"}>
+              <div className={styles["sobre-div__extra-info"]}>
                 <span>
                   <h4>Informações do Arquivo</h4>
                   <p>teste.exe | 280 mb</p>
@@ -53,16 +55,16 @@ export function JogosTabs({
               </div>
             </div>
           </div>
-          <div className={"sobre-div__outros"}>
-            <h3>Tradução</h3>
-            <JogosTabs_traducoes
+          <div className={styles["sobre-div__outros"]}>
+            <h3 className={styles["sobre-div__outros-titulo"]}>Tradução</h3>
+            <JogosTabsTraducoes
               texto={params.traducaoTexto || []}
               audio={params.traducaoAudio || []}
             />
 
-            <h3>Gênero</h3>
+            <h3 className={styles["sobre-div__outros-titulo"]}>Gênero</h3>
             {params.genero && params.genero.length > 0 ? (
-              <ul className={"sobre-div__genero"}>
+              <ul className={styles["sobre-div__genero"]}>
                 {params.genero.map((item, index) => (
                   <li key={index}>{item}</li>
                 ))}
@@ -71,9 +73,9 @@ export function JogosTabs({
               <p>Não Informado</p>
             )}
 
-            <h3>Tags</h3>
+            <h3 className={styles["sobre-div__outros-titulo"]}>Tags</h3>
             {allTags.length > 0 ? (
-              <p className={"sobre-div__tags"}>{allTags}</p>
+              <p className={styles["sobre-div__tags"]}>{allTags}</p>
             ) : (
               <p>Não Informado</p>
             )}
@@ -84,7 +86,7 @@ export function JogosTabs({
       <TabPanel>
         {hasChangelog &&
           params.changelog.map((item, index) => (
-            <div key={index} className={"sobre-div__changelog"}>
+            <div key={index} className={styles["sobre-div__changelog"]}>
               {item}
             </div>
           ))}

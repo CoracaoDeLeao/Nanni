@@ -8,7 +8,7 @@ import "swiper/css/scrollbar";
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import styles from "./components.jogos.carrossel.module.css";
+import styles from "./JogosGaleria.module.css";
 
 export default function JogosGaleria(
   galeria: string[],

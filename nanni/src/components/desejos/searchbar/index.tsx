@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "./components.searchbar.module.css";
+import styles from "./Searchbar.module.css";
 import { useRef, useState } from "react";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 

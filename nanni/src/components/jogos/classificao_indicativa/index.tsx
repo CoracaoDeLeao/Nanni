@@ -1,6 +1,6 @@
 import { faixaEtaria, getFaixaEtaria } from "@/types/FaixaEtaria";
 import Image from "next/image";
-import styles from "./components.jogos.clsindicativa.module.css";
+import styles from "./JogosClassificaoIndicativa.module.css";
 
 export function JogosClassificaoIndicativa({
   clsIndicativa,

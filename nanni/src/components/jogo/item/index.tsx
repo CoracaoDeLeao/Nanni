@@ -1,5 +1,5 @@
 import Image from "next/image";
-import styles from "./components.jogo.item.module.css";
+import styles from "./JogoItem.module.css";
 import { JogoItemProps } from "@/types/JogoItemProps";
 
 export function JogoItem(props: { data: JogoItemProps }) {
