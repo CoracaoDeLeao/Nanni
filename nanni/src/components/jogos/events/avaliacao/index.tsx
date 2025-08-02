@@ -20,7 +20,7 @@ export function JogosAvaliacao({
   const { user } = useAuth();
 
   async function handleAvaliar() {
-    const uid: string = user?.id ?? "nC0vCtHHKWaHNm3gA3ZR1l6MCJq2";
+    const uid: string = user?.id;
 
     setLoading(true);
 

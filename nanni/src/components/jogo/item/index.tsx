@@ -10,8 +10,8 @@ export function JogoItem(props: { data: JogoItemProps }) {
   return (
     <div className={styles.container}>
       <Image
-        src={item.imagem}
-        alt={item.imagem_alt}
+        src={item.banner}
+        alt={`Banne de ${item.nome}`}
         width={180}
         height={220}
         className={styles.imagem}

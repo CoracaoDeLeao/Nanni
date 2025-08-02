@@ -1,6 +1,5 @@
 "use client";
 
-
 import "./JogosTabs.react-tabs.css";
 import styles from "./JogosTabs.module.css";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";

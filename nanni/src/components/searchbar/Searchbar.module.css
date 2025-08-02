@@ -14,6 +14,10 @@
   border-color: var(--p1);
 }
 
+.searchbar__icon {
+  fill: var(--foreground);
+}
+
 .searchbar__icon:hover {
   cursor: pointer;
 }

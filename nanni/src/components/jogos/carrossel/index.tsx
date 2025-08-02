@@ -10,11 +10,17 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import styles from "./JogosGaleria.module.css";
 
-export default function JogosGaleria(
-  galeria: string[],
-  dimW: number = 700,
-  dimH: number = 400,
-) {
+type JogosGaleriaProps = {
+  galeria: string[];
+  dimW?: number;
+  dimH?: number;
+};
+
+export default function JogosGaleria({
+  galeria,
+  dimW,
+  dimH,
+}: JogosGaleriaProps) {
   const swiperRef = useRef<SwiperClass>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [thumbsSwiper, setThumbsSwiper] = useState(null);

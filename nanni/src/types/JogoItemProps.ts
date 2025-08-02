@@ -1,7 +1,9 @@
 export type JogoItemProps = {
-  imagem: string;
-  imagem_alt: string;
+  id: string;
+  nome: string;
+  sobre: string;
+  banner: string;
   avaliacao: string;
-  preco: string;
+  preco: number;
   tags: string[];
 };

@@ -1,28 +1,32 @@
 .header {
-    display: inline-flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    background-color: var(--foreground);
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background-color: var(--foreground);
+}
+
+.header-semparams {
+  justify-content: flex-end;
 }
 
 .resultado {
-    flex: 1;
-    display: inline-flex;
-    gap: 10px;
+  flex: 1;
+  display: inline-flex;
+  gap: 10px;
 }
 
 .resultado > p {
-    font-size: 16px;
-    color: var(--white);
+  font-size: 16px;
+  color: var(--white);
 }
 
 .resultado__query {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 3px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
 }

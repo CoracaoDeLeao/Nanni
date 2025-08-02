@@ -1,17 +1,17 @@
 "use client";
 
 import styles from "@/styles/desejos.module.css";
-import { DesejosItem } from "../item";
+import { DesejosItem } from "../_item";
 import { ItemDesejo } from "@/types/ItemDesejo";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   deleteDesejo,
   fetchListaDesejo,
 } from "@/lib/service/ListaDesejoService";
 import { useAuth } from "@/context/AuthContextProvider";
 import { fetchJogos, getAvaliacoes } from "@/lib/service/JogoService";
-import { DesejosSearchBar } from "../searchbar";
-import { DesejosDropdown, DesejosDropdownItemProps } from "../dropdown";
+import { SearchBar } from "../../searchbar";
+import { DesejosDropdown, DesejosDropdownItemProps } from "../_dropdown";
 import { BsFillPersonXFill } from "react-icons/bs";
 
 export function DesejosList() {
@@ -23,6 +23,7 @@ export function DesejosList() {
 
   const [listDesejos, setListDesejos] = useState<ItemDesejo[]>([]);
   const [query, setQuery] = useState<string>("");
+  const inputRef = useRef<HTMLInputElement>(null);
   const [typeFilter, setTypeFilter] = useState<DesejosDropdownItemProps>({
     selected: 0,
     items: [
@@ -95,7 +96,7 @@ export function DesejosList() {
     run();
   }, [user]);
 
-  // FUNÇÃO DE QUERY
+  // FUNÇÕES DE QUERY
   const filteredListDesejos = useMemo(() => {
     const q = query.toLowerCase().trim();
 
@@ -112,6 +113,18 @@ export function DesejosList() {
 
     return typeFilter.selected === 1 ? filtered.reverse() : filtered;
   }, [query, typeFilter.selected, listDesejos]);
+
+  const handleQuery = () => {
+    if (inputRef.current) {
+      setQuery(inputRef.current.value);
+    }
+  };
+
+  const isInputClear = () => {
+    if (inputRef.current && inputRef.current.value.trim() === "") {
+      setQuery("");
+    }
+  };
 
   // > É redireciado para comprar item
   async function handleComprar(des_id: string) {
@@ -139,7 +152,11 @@ export function DesejosList() {
   return !loadingState.loading ? (
     <>
       <div className={styles["filterbar"]}>
-        <DesejosSearchBar setQuery={setQuery} />
+        <SearchBar
+          inputRef={inputRef}
+          onButtonClick={handleQuery}
+          onChange={isInputClear}
+        />
         <DesejosDropdown listItems={typeFilter} setListItems={setTypeFilter} />
       </div>
       <div className={styles["lista-desejos"]}>

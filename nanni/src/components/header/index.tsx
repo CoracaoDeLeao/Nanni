@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "./Header.module.css";
 import { HeaderPerfil } from "./_perfil";
+import HeaderSearchBar from "./_searchbar";
 
 export function Header() {
   return (
@@ -19,6 +20,7 @@ export function Header() {
             style={{ height: "auto" }}
           />
         </Link>
+        <HeaderSearchBar />
       </div>
       <HeaderPerfil />
       <div className={styles["header-inferior"]}>

@@ -1,6 +1,5 @@
 "use client";
 
-
 import styles from "./JogosTabsTraducoes.module.css";
 import Image from "next/image";
 import { JSX, useEffect, useState } from "react";
@@ -34,8 +33,12 @@ export function JogosTabsTraducoes({
           for (let i = 0; i < traducoes.length; i++) {
             tmpElements.push(
               <tr key={i}>
-                <td className={styles["td"]}>{texto[i] ? traducaoCell(paises.get(texto[i])) : ""}</td>
-                <td className={styles["td"]}>{audio[i] ? traducaoCell(paises.get(audio[i])) : ""}</td>
+                <td className={styles["td"]}>
+                  {texto[i] ? traducaoCell(paises.get(texto[i])) : ""}
+                </td>
+                <td className={styles["td"]}>
+                  {audio[i] ? traducaoCell(paises.get(audio[i])) : ""}
+                </td>
               </tr>,
             );
           }
@@ -64,9 +67,7 @@ export function JogosTabsTraducoes({
           <th className={styles["th"]}>Aúdio</th>
         </tr>
       </thead>
-      <tbody className={styles["tbody"]}>
-        {elements}
-      </tbody>
+      <tbody className={styles["tbody"]}>{elements}</tbody>
     </table>
   );
 }
