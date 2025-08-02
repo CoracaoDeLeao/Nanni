@@ -12,6 +12,7 @@
   --color-button-hover: #0c2b5a;
   --color-button-success: #019934;
   --color-button-success-hover: #01bf40;
+  --color-button-disabled: #cccccc;
   --color-dropdown-border: #999;
   --color-dropdown-hover: #f5f5f5;
   --color-dropdown-selected-bg: #e6f0ff;
@@ -158,4 +159,26 @@
   background: var(--color-button-bg);
   border-radius: 50%;
   color: var(--color-white);
+}
+
+/* SPINNER */
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--color-white);
+  margin: 0 auto;
+}
+
+.btnPublicar:disabled {
+  background-color: var(--color-button-disabled);
+  cursor: not-allowed;
+}
+
+.spinnerContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }

@@ -12,9 +12,7 @@ import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 
-// TODO: Polir campos dos frames 1,2 e 3
 // TODO: Fazer o preview
-// TODO: Animação de carregamento no handlePublish
 
 // Schema de validação
 const formSchema = z
@@ -40,7 +38,7 @@ const formSchema = z
         z.object({
           url: z.string(),
           file: z.instanceof(File),
-        }),
+        })
       )
       .min(1, "Adicione pelo menos uma imagem"),
     devStatus: z.string().min(1, "Status de desenvolvimento é obrigatório"),
@@ -53,7 +51,7 @@ const formSchema = z
         z.object({
           id: z.string(),
           language: z.string().min(1, "Idioma é obrigatório"),
-        }),
+        })
       )
       .min(1, "Adicione pelo menos uma tradução de texto"),
     audioTranslations: z
@@ -61,7 +59,7 @@ const formSchema = z
         z.object({
           id: z.string(),
           language: z.string().min(1, "Idioma é obrigatório"),
-        }),
+        })
       )
       .min(1, "Adicione pelo menos uma tradução de áudio"),
 
@@ -152,6 +150,8 @@ export default function PublicarJogo() {
     4: ["principalFile", "demoFile", "currencyValue", "isFree", "noDemo"],
   };
 
+  const [isPublishing, setIsPublishing] = useState(false);
+
   // PublicarJogo
   const [currentStep, setCurrentStep] = useState(1);
   const [direction, setDirection] = useState<"left" | "right">("right");
@@ -198,6 +198,7 @@ export default function PublicarJogo() {
   // Função para publicar
   const handlePublish = async () => {
     try {
+      setIsPublishing(true);
       const formData = methods.getValues();
 
       // Corrigir para atender à interface do publishGame
@@ -242,6 +243,8 @@ export default function PublicarJogo() {
     } catch (error) {
       console.error("Erro na publicação:", error);
       alert("Erro ao publicar o jogo. Por favor, tente novamente.");
+    } finally {
+      setIsPublishing(false);
     }
   };
 
@@ -260,6 +263,15 @@ export default function PublicarJogo() {
       opacity: 0,
     }),
   };
+
+  const Spinner = () => (
+    <motion.div
+      initial={{ rotate: 0 }}
+      animate={{ rotate: 360 }}
+      transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
+      className={styles.spinner}
+    />
+  );
 
   return (
     <FormProvider {...methods}>
@@ -324,8 +336,15 @@ export default function PublicarJogo() {
                       <button
                         className={styles.btnPublicar}
                         onClick={handlePublish}
+                        disabled={isPublishing}
                       >
-                        PUBLICAR
+                        {isPublishing ? (
+                          <div className={styles.spinnerContainer}>
+                            <Spinner />
+                          </div>
+                        ) : (
+                          "PUBLICAR"
+                        )}
                       </button>
                     )}
                   </div>

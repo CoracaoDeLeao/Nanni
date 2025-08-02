@@ -42,6 +42,10 @@ export default function Frame1() {
     }
   }, [ageRating, setValue]);
 
+  const handleGameNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue("nomeJogo", e.target.value, { shouldValidate: true });
+  };
+
   const handleImageUpload = (
     e: ChangeEvent<HTMLInputElement>,
     fieldName: "bannerImage" | "iconImage"
@@ -125,6 +129,7 @@ export default function Frame1() {
           {...register("nomeJogo")}
           className={`${styles.inputField} ${errors.nomeJogo ? styles.errorInput : ""}`}
           placeholder="Digite o nome do jogo"
+          onChange={handleGameNameChange}
         />
         {errors.nomeJogo && (
           <p className={styles.errorMessage}>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Dropdown from "@/components/dropdown/dropdown";
 import styles from "./Frame3.module.css";
 import { FiPlusCircle, FiX } from "react-icons/fi";
@@ -28,6 +28,10 @@ export default function Frame3() {
 
   const [newGenre, setNewGenre] = useState("");
   const [newTag, setNewTag] = useState("");
+
+  useEffect(() => {
+    setValue("plataforma", plataforma, { shouldValidate: true });
+  }, [plataforma, setValue]);
 
   const handlePlatformChange = (platform: string) => {
     setValue("plataforma", platform, { shouldValidate: true });
