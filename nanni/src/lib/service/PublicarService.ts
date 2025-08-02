@@ -1,13 +1,14 @@
 import { db } from "@/lib/Firebase";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection, FieldValue, serverTimestamp } from "firebase/firestore";
 import axios from "axios";
 import { COLLECTIONS } from "@/constants/FirebaseCollections";
 
 interface GameVersion {
-  nome: string;
+  nomeArquivo: string;
   tamanho: number;
   versao: string;
   eDemo: boolean;
+  data: FieldValue;
 }
 
 // Função para fazer upload de imagens para o ImageBB
@@ -62,19 +63,21 @@ export const publishGame = async (gameData: {
 
     if (gameData.principalFile) {
       versoes.push({
-        nome: gameData.principalFile.name,
+        nomeArquivo: gameData.principalFile.name,
         tamanho: gameData.principalFile.size,
         versao: gameData.principalFile.version,
         eDemo: false,
+        data: serverTimestamp(),
       });
     }
 
     if (gameData.demoFile) {
       versoes.push({
-        nome: gameData.demoFile.name,
+        nomeArquivo: gameData.demoFile.name,
         tamanho: gameData.demoFile.size,
         versao: gameData.demoFile.version,
         eDemo: true,
+        data: serverTimestamp(),
       });
     }
 
