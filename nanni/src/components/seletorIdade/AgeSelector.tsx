@@ -1,4 +1,3 @@
-// components/AgeSelector.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -8,7 +7,7 @@ import styles from "./AgeSelector.module.css";
 
 const ageRatings = [
   {
-    id: "Livre",
+    id: "L",
     label: "Livre",
     name: "LIVRE PARA TODAS AS IDADES",
     image: "/classind/CI_L.png",
@@ -53,58 +52,73 @@ const ageRatings = [
 
 type AgeSelectorProps = {
   onChange?: (id: string) => void;
+  value?: string;
 };
 
-export default function AgeSelector({ onChange }: AgeSelectorProps) {
-  const [currentRating, setCurrentRating] = useState(3); // Começa em 14 anos
+export default function AgeSelector({ onChange, value }: AgeSelectorProps) {
+  // Obter o índice inicial baseado no valor passado
+  const initialIndex = value ? ageRatings.findIndex((r) => r.id === value) : 3;
 
+  // Estado para armazenar apenas o índice
+  const [currentIndex, setCurrentIndex] = useState(initialIndex);
+
+  // Atualizar o índice apenas quando o valor externo mudar
   useEffect(() => {
-    if (onChange) {
-      onChange(ageRatings[currentRating].id);
+    if (value) {
+      const newIndex = ageRatings.findIndex((r) => r.id === value);
+      if (newIndex >= 0 && newIndex !== currentIndex) {
+        setCurrentIndex(newIndex);
+      }
     }
-  }, [currentRating, onChange]);
+  }, [currentIndex, value]);
 
   const increaseRating = () => {
-    if (currentRating < ageRatings.length - 1) {
-      setCurrentRating(currentRating + 1);
+    if (currentIndex < ageRatings.length - 1) {
+      const newIndex = currentIndex + 1;
+      setCurrentIndex(newIndex);
+      onChange?.(ageRatings[newIndex].id);
     }
   };
 
   const decreaseRating = () => {
-    if (currentRating > 0) {
-      setCurrentRating(currentRating - 1);
+    if (currentIndex > 0) {
+      const newIndex = currentIndex - 1;
+      setCurrentIndex(newIndex);
+      onChange?.(ageRatings[newIndex].id);
     }
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.imageContainer}>
-        <Image
-          src={ageRatings[currentRating].image}
-          alt={ageRatings[currentRating].name}
-          width={100}
-          height={0}
-          style={{ height: "auto" }}
-          className={styles.ratingImage}
-        />
+        <div className={styles.imageWrapper}>
+          <Image
+            src={ageRatings[currentIndex].image}
+            alt={ageRatings[currentIndex].name}
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className={styles.ratingImage}
+            style={{ objectFit: "contain" }}
+          />
+        </div>
       </div>
 
       <div className={styles.warnText}>
-        <p>{ageRatings[currentRating].name}</p>
+        <p>{ageRatings[currentIndex].name}</p>
       </div>
 
       <div className={styles.controls}>
         <button
           className={styles.controlButton}
           onClick={increaseRating}
-          disabled={currentRating === ageRatings.length - 1}
+          disabled={currentIndex === ageRatings.length - 1}
         >
           <FiArrowUp />
         </button>
         <button
           className={styles.controlButton}
           onClick={decreaseRating}
-          disabled={currentRating === 0}
+          disabled={currentIndex === 0}
         >
           <FiArrowDown />
         </button>

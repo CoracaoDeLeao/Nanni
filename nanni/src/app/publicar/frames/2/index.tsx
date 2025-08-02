@@ -1,28 +1,21 @@
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { FiPlusCircle, FiTrash2, FiCheck } from "react-icons/fi";
 import styles from "./Frame2.module.css";
+import { useFormContext } from "react-hook-form";
 
-interface Frame2Props {
-  text: string;
-  setText: (text: string) => void;
-  textTranslations: { id: string; language: string }[];
-  setTextTranslations: (
-    translations: { id: string; language: string }[],
-  ) => void;
-  audioTranslations: { id: string; language: string }[];
-  setAudioTranslations: (
-    translations: { id: string; language: string }[],
-  ) => void;
+interface Translation {
+  id: string;
+  language: string;
 }
 
-export default function Frame2({
-  text,
-  setText,
-  textTranslations,
-  setTextTranslations,
-  audioTranslations,
-  setAudioTranslations,
-}: Frame2Props) {
+export default function Frame2() {
+  const {
+    register,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useFormContext();
+
   const [newLanguage, setNewLanguage] = useState("");
   const [activeInput, setActiveInput] = useState<{
     type: "text" | "audio";
@@ -30,8 +23,13 @@ export default function Frame2({
   } | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Obter valores do formulário
+  const text = watch("text") as string;
+  const textTranslations = watch("textTranslations") as Translation[];
+  const audioTranslations = watch("audioTranslations") as Translation[];
+
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setText(e.target.value);
+    setValue("text", e.target.value, { shouldValidate: true });
   };
 
   const startAddingTextTranslation = () => {
@@ -41,17 +39,26 @@ export default function Frame2({
 
   const saveTextTranslation = () => {
     if (newLanguage.trim()) {
-      setTextTranslations([
-        ...textTranslations,
-        { id: Date.now().toString(), language: newLanguage },
-      ]);
+      const newTranslation = {
+        id: Date.now().toString(),
+        language: newLanguage,
+      };
+
+      setValue("textTranslations", [...textTranslations, newTranslation], {
+        shouldValidate: true,
+      });
+
       setNewLanguage("");
       setActiveInput(null);
     }
   };
 
   const removeTextTranslation = (id: string) => {
-    setTextTranslations(textTranslations.filter((t) => t.id !== id));
+    setValue(
+      "textTranslations",
+      textTranslations.filter((t) => t.id !== id),
+      { shouldValidate: true },
+    );
   };
 
   const startAddingAudioTranslation = () => {
@@ -61,17 +68,26 @@ export default function Frame2({
 
   const saveAudioTranslation = () => {
     if (newLanguage.trim()) {
-      setAudioTranslations([
-        ...audioTranslations,
-        { id: Date.now().toString(), language: newLanguage },
-      ]);
+      const newTranslation = {
+        id: Date.now().toString(),
+        language: newLanguage,
+      };
+
+      setValue("audioTranslations", [...audioTranslations, newTranslation], {
+        shouldValidate: true,
+      });
+
       setNewLanguage("");
       setActiveInput(null);
     }
   };
 
   const removeAudioTranslation = (id: string) => {
-    setAudioTranslations(audioTranslations.filter((a) => a.id !== id));
+    setValue(
+      "audioTranslations",
+      audioTranslations.filter((a) => a.id !== id),
+      { shouldValidate: true },
+    );
   };
 
   const handleKeyDown = (e: React.KeyboardEvent, type: "text" | "audio") => {
@@ -112,7 +128,7 @@ export default function Frame2({
     }
   }, [activeInput]);
 
-  const characterCount = text.length;
+  const characterCount = text?.length || 0;
   const maxCharacters = 500;
 
   return (
@@ -120,12 +136,15 @@ export default function Frame2({
       <div className={styles.header}>
         <h2 className={styles.title}>Sobre</h2>
         <textarea
-          className={styles.textarea}
-          value={text}
+          className={`${styles.textarea} ${errors.text ? styles.errorInput : ""}`}
+          {...register("text")}
           onChange={handleTextChange}
           maxLength={maxCharacters}
           placeholder="Digite o texto aqui..."
         />
+        {errors.text && (
+          <p className={styles.errorMessage}>{String(errors.text.message)}</p>
+        )}
         <p className={styles.counter}>
           {characterCount}/{maxCharacters} caracteres
         </p>
@@ -139,7 +158,7 @@ export default function Frame2({
         <p className={styles.sectionLabel}>Texto</p>
 
         <div className={styles.chipsContainer}>
-          {textTranslations.map((translation) => (
+          {textTranslations?.map((translation) => (
             <div key={translation.id} className={styles.chip}>
               <span>{translation.language}</span>
               <button
@@ -178,13 +197,18 @@ export default function Frame2({
             </button>
           )}
         </div>
+        {errors.textTranslations && (
+          <p className={styles.errorMessage}>
+            {String(errors.textTranslations.message)}
+          </p>
+        )}
       </div>
 
       <div className={styles.translationSection}>
         <p className={styles.sectionLabel}>Áudio</p>
 
         <div className={styles.chipsContainer}>
-          {audioTranslations.map((translation) => (
+          {audioTranslations?.map((translation) => (
             <div key={translation.id} className={styles.chip}>
               <span>{translation.language}</span>
               <button
@@ -223,6 +247,11 @@ export default function Frame2({
             </button>
           )}
         </div>
+        {errors.audioTranslations && (
+          <p className={styles.errorMessage}>
+            {String(errors.audioTranslations.message)}
+          </p>
+        )}
       </div>
     </div>
   );

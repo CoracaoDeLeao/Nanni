@@ -3,11 +3,6 @@ export type GalleryImage = {
   url: string;
 };
 
-export type Translation = {
-  id: string;
-  language: string;
-};
-
 // Adicione o tipo FileInfo
 export type FileInfo = {
   name: string;

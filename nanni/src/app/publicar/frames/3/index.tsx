@@ -2,8 +2,9 @@ import { useState } from "react";
 import Dropdown from "@/components/dropdown/dropdown";
 import styles from "./Frame3.module.css";
 import { FiPlusCircle, FiX } from "react-icons/fi";
+import { useFormContext } from "react-hook-form";
 
-const plataformaRecomendada = ["Windowns 11", "Windowns 10", "Windowns 7"];
+const plataformaRecomendada = ["Windows 11", "Windows 10", "Windows 7"];
 const conteudoSensivelOptions = [
   "Violência",
   "Linguagem Inapropriada",
@@ -11,84 +12,93 @@ const conteudoSensivelOptions = [
   "Drogas",
 ];
 
-interface Frame3Props {
-  sensitiveContents: string[];
-  setSensitiveContents: (contents: string[]) => void;
-  genres: string[];
-  setGenres: (genres: string[]) => void;
-  tags: string[];
-  setTags: (tags: string[]) => void;
-  onPlatformSelected: (platform: string) => void;
-}
+export default function Frame3() {
+  const {
+    setValue,
+    watch,
+    formState: { errors },
+  } = useFormContext();
 
-export default function Frame3({
-  sensitiveContents,
-  setSensitiveContents,
-  genres,
-  setGenres,
-  tags,
-  setTags,
-  onPlatformSelected,
-}: Frame3Props) {
+  // Obter valores do formulário
+  const sensitiveContents = (watch("sensitiveContents") as string[]) || [];
+  const genres = (watch("genres") as string[]) || [];
+  const tags = (watch("tags") as string[]) || [];
+  const plataforma =
+    (watch("plataforma") as string) || plataformaRecomendada[0];
+
   const [newGenre, setNewGenre] = useState("");
   const [newTag, setNewTag] = useState("");
 
-  // Estado interno inicializado com o valor da prop ou o primeiro item do array
-  const [selectedPlatform, setSelectedPlatform] = useState(
-    plataformaRecomendada[0],
-  );
-
   const handlePlatformChange = (platform: string) => {
-    setSelectedPlatform(platform);
-    onPlatformSelected(platform);
+    setValue("plataforma", platform, { shouldValidate: true });
   };
 
   const toggleSensitiveContent = (content: string) => {
-    if (sensitiveContents.includes(content)) {
-      setSensitiveContents(sensitiveContents.filter((c) => c !== content));
-    } else {
-      setSensitiveContents([...sensitiveContents, content]);
-    }
+    const newContents = sensitiveContents.includes(content)
+      ? sensitiveContents.filter((c) => c !== content)
+      : [...sensitiveContents, content];
+
+    setValue("sensitiveContents", newContents, { shouldValidate: true });
   };
 
   const addGenre = () => {
     if (newGenre.trim() && genres.length < 2) {
-      setGenres([...genres, newGenre.trim()]);
+      const newGenres = [...genres, newGenre.trim()];
+      setValue("genres", newGenres, { shouldValidate: true });
       setNewGenre("");
     }
   };
 
   const addTag = () => {
     if (newTag.trim()) {
-      setTags([...tags, newTag.trim()]);
+      const newTags = [...tags, newTag.trim()];
+      setValue("tags", newTags, { shouldValidate: true });
       setNewTag("");
     }
   };
 
   const removeGenre = (index: number) => {
-    setGenres(genres.filter((_, i) => i !== index));
+    const newGenres = genres.filter((_, i) => i !== index);
+    setValue("genres", newGenres, { shouldValidate: true });
   };
 
   const removeTag = (index: number) => {
-    setTags(tags.filter((_, i) => i !== index));
+    const newTags = tags.filter((_, i) => i !== index);
+    setValue("tags", newTags, { shouldValidate: true });
+  };
+
+  // Função auxiliar para mensagens de erro
+  const getErrorMessage = (error: unknown): string => {
+    if (typeof error === "string") return error;
+    if (error instanceof Error) return error.message;
+    return "Erro de validação";
   };
 
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Conteúdo</h1>
 
-      <div className={styles.section}>
-        <h2 className={styles.sectionTitleA}>Plataforma Recomendada</h2>
+      <div
+        className={`${styles.section} ${errors.plataforma ? styles.errorSection : ""}`}
+      >
+        <h2 className={styles.sectionTitle}>Plataforma Recomendada</h2>
         <Dropdown
           opcoes={plataformaRecomendada}
           styles={styles}
           onChange={handlePlatformChange}
-          value={selectedPlatform}
+          value={plataforma}
         />
+        {errors.plataforma && (
+          <p className={styles.errorMessage}>
+            {getErrorMessage(errors.plataforma)}
+          </p>
+        )}
       </div>
 
-      <div className={styles.section}>
-        <h2 className={styles.sectionTitleA}>Conteúdo Sensível</h2>
+      <div
+        className={`${styles.section} ${errors.sensitiveContents ? styles.errorSection : ""}`}
+      >
+        <h2 className={styles.sectionTitle}>Conteúdo Sensível</h2>
         <div className={styles.sensitiveContent}>
           {conteudoSensivelOptions.map((option) => (
             <label key={option} className={styles.checkboxContainer}>
@@ -102,12 +112,19 @@ export default function Frame3({
             </label>
           ))}
         </div>
+        {errors.sensitiveContents && (
+          <p className={styles.errorMessage}>
+            {getErrorMessage(errors.sensitiveContents)}
+          </p>
+        )}
       </div>
 
-      <div className={styles.section}>
+      <div
+        className={`${styles.section} ${errors.genres ? styles.errorSection : ""}`}
+      >
         <div className={styles.sectionHeader}>
           <div className={styles.titleWithCounter}>
-            <h2 className={styles.sectionTitle}>Gênero</h2>
+            <h2 className={styles.sectionTitleChips}>Gênero</h2>
             <div className={styles.counterBadge}>
               <span>{genres.length}/2</span>
             </div>
@@ -136,6 +153,7 @@ export default function Frame3({
             onChange={(e) => setNewGenre(e.target.value)}
             placeholder="Adicionar gênero"
             disabled={genres.length >= 2}
+            className={errors.genres ? styles.errorInput : ""}
           />
           <button
             onClick={addGenre}
@@ -145,10 +163,17 @@ export default function Frame3({
             <FiPlusCircle size={20} />
           </button>
         </div>
+        {errors.genres && (
+          <p className={styles.errorMessage}>
+            {getErrorMessage(errors.genres)}
+          </p>
+        )}
       </div>
 
-      <div className={styles.section}>
-        <h2 className={styles.sectionTitle}>Tags</h2>
+      <div
+        className={`${styles.section} ${errors.tags ? styles.errorSection : ""}`}
+      >
+        <h2 className={styles.sectionTitleChips}>Tags</h2>
 
         <div className={styles.chipsContainer}>
           {tags.map((tag, index) => (
@@ -170,6 +195,7 @@ export default function Frame3({
             value={newTag}
             onChange={(e) => setNewTag(e.target.value)}
             placeholder="Adicionar tag"
+            className={errors.tags ? styles.errorInput : ""}
           />
           <button
             onClick={addTag}
@@ -179,6 +205,9 @@ export default function Frame3({
             <FiPlusCircle size={20} />
           </button>
         </div>
+        {errors.tags && (
+          <p className={styles.errorMessage}>{getErrorMessage(errors.tags)}</p>
+        )}
       </div>
     </div>
   );

@@ -7,44 +7,150 @@ import Frame1 from "./frames/1";
 import Frame2 from "./frames/2";
 import Frame3 from "./frames/3";
 import Frame4 from "./frames/4";
-import { FileInfo, GalleryImage, Translation } from "@/types/Publicar";
 import { publishGame } from "@/lib/service/PublicarService";
+import z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FormProvider, useForm } from "react-hook-form";
 
-// TODO: Colocar bloqueio de campos vazios
+// TODO: Polir campos dos frames 1,2 e 3
 // TODO: Fazer o preview
+// TODO: Animação de carregamento no handlePublish
+
+// Schema de validação
+const formSchema = z
+  .object({
+    // Frame1
+    nomeJogo: z.string().min(1, "Nome do jogo é obrigatório"),
+    bannerImage: z
+      .object({
+        url: z.string(),
+        file: z.instanceof(File),
+      })
+      .nullable()
+      .refine((val) => val !== null, { message: "Banner é obrigatório" }),
+    iconImage: z
+      .object({
+        url: z.string(),
+        file: z.instanceof(File),
+      })
+      .nullable()
+      .refine((val) => val !== null, { message: "Ícone é obrigatório" }),
+    images: z
+      .array(
+        z.object({
+          url: z.string(),
+          file: z.instanceof(File),
+        }),
+      )
+      .min(1, "Adicione pelo menos uma imagem"),
+    devStatus: z.string().min(1, "Status de desenvolvimento é obrigatório"),
+    ageRating: z.string().min(1, "Classificação etária é obrigatória"),
+
+    // Frame2
+    text: z.string().min(1, "Descrição do jogo é obrigatória"),
+    textTranslations: z
+      .array(
+        z.object({
+          id: z.string(),
+          language: z.string().min(1, "Idioma é obrigatório"),
+        }),
+      )
+      .min(1, "Adicione pelo menos uma tradução de texto"),
+    audioTranslations: z
+      .array(
+        z.object({
+          id: z.string(),
+          language: z.string().min(1, "Idioma é obrigatório"),
+        }),
+      )
+      .min(1, "Adicione pelo menos uma tradução de áudio"),
+
+    // Frame3
+    sensitiveContents: z.array(z.string()),
+    genres: z.array(z.string()).min(1, "Selecione pelo menos um gênero"),
+    tags: z.array(z.string()).min(1, "Adicione pelo menos uma tag"),
+    plataforma: z.string().min(1, "Plataforma é obrigatória"),
+
+    // Frame4
+    principalFile: z
+      .object({
+        name: z.string(),
+        size: z.number(),
+        version: z.string(),
+      })
+      .nullable()
+      .refine((val) => val !== null, {
+        message: "Arquivo principal é obrigatório",
+      }),
+    demoFile: z
+      .object({
+        name: z.string(),
+        size: z.number(),
+        version: z.string(),
+      })
+      .optional()
+      .nullable(),
+    currencyValue: z.string().optional(),
+    isFree: z.boolean(),
+    noDemo: z.boolean(),
+  })
+  .refine((data) => data.noDemo || data.demoFile, {
+    message: "Arquivo de demo é obrigatório",
+    path: ["demoFile"],
+  })
+  .refine((data) => data.isFree || data.currencyValue, {
+    message: "Valor monetário é obrigatório",
+    path: ["currencyValue"],
+  });
+
+type FormValues = z.infer<typeof formSchema>;
 
 export default function PublicarJogo() {
-  // Frame1
-  const [nomeJogo, setNomeJogo] = useState("");
-  const [bannerImage, setBannerImage] = useState<{
-    url: string;
-    file: File;
-  } | null>(null);
-  const [iconImage, setIconImage] = useState<{
-    url: string;
-    file: File;
-  } | null>(null);
-  const [images, setImages] = useState<GalleryImage[]>([]);
-  const [devStatus, setDevStatus] = useState("");
-  const [ageRating, setAgeRating] = useState("");
+  const methods = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      nomeJogo: "",
+      bannerImage: null,
+      iconImage: null,
+      images: [],
+      devStatus: "",
+      ageRating: "",
+      text: "",
+      textTranslations: [],
+      audioTranslations: [],
+      sensitiveContents: [],
+      genres: [],
+      tags: [],
+      plataforma: "",
+      principalFile: null,
+      demoFile: null,
+      currencyValue: "",
+      isFree: false,
+      noDemo: false,
+    },
+  });
 
-  // Frame2
-  const [text, setText] = useState("");
-  const [textTranslations, setTextTranslations] = useState<Translation[]>([]);
-  const [audioTranslations, setAudioTranslations] = useState<Translation[]>([]);
+  //  Validação
+  const { trigger } = methods;
 
-  // Frame3
-  const [sensitiveContents, setSensitiveContents] = useState<string[]>([]);
-  const [genres, setGenres] = useState<string[]>([]);
-  const [tags, setTags] = useState<string[]>([]);
-  const [plataforma, setPlataforma] = useState("");
+  // Definir tipo para os campos dos frames
+  type FrameFields = {
+    [key: number]: (keyof FormValues)[];
+  };
 
-  // Frame4
-  const [principalFile, setPrincipalFile] = useState<FileInfo | null>(null);
-  const [demoFile, setDemoFile] = useState<FileInfo | null>(null);
-  const [currencyValue, setCurrencyValue] = useState("");
-  const [isFree, setIsFree] = useState(false);
-  const [noDemo, setNoDemo] = useState(false);
+  const frameFields: FrameFields = {
+    1: [
+      "nomeJogo",
+      "bannerImage",
+      "iconImage",
+      "images",
+      "devStatus",
+      "ageRating",
+    ],
+    2: ["text", "textTranslations", "audioTranslations"],
+    3: ["sensitiveContents", "genres", "tags", "plataforma"],
+    4: ["principalFile", "demoFile", "currencyValue", "isFree", "noDemo"],
+  };
 
   // PublicarJogo
   const [currentStep, setCurrentStep] = useState(1);
@@ -52,54 +158,19 @@ export default function PublicarJogo() {
   const totalSteps = 4;
 
   const stepContents = [
-    <Frame1
-      key={1}
-      gameName={nomeJogo}
-      setGameName={setNomeJogo}
-      bannerImage={bannerImage}
-      setBannerImage={setBannerImage}
-      iconImage={iconImage}
-      setIconImage={setIconImage}
-      images={images}
-      setImages={setImages}
-      onDevStatusSelected={setDevStatus}
-      onAgeRatingSelected={setAgeRating}
-    />,
-    <Frame2
-      key={2}
-      text={text}
-      setText={setText}
-      textTranslations={textTranslations}
-      setTextTranslations={setTextTranslations}
-      audioTranslations={audioTranslations}
-      setAudioTranslations={setAudioTranslations}
-    />,
-    <Frame3
-      key={3}
-      sensitiveContents={sensitiveContents}
-      setSensitiveContents={setSensitiveContents}
-      genres={genres}
-      setGenres={setGenres}
-      tags={tags}
-      setTags={setTags}
-      onPlatformSelected={setPlataforma}
-    />,
-    <Frame4
-      key={4}
-      principalFile={principalFile}
-      setPrincipalFile={setPrincipalFile}
-      demoFile={demoFile}
-      setDemoFile={setDemoFile}
-      currencyValue={currencyValue}
-      setCurrencyValue={setCurrencyValue}
-      isFree={isFree}
-      setIsFree={setIsFree}
-      noDemo={noDemo}
-      setNoDemo={setNoDemo}
-    />,
+    <Frame1 key={1} />,
+    <Frame2 key={2} />,
+    <Frame3 key={3} />,
+    <Frame4 key={4} />,
   ];
 
-  const handleStepChange = (step: number) => {
+  const handleStepChange = async (step: number) => {
+    if (step > currentStep) {
+      const fields = frameFields[currentStep];
+      const isValid = await trigger(fields);
+      if (!isValid) return;
+    }
+
     setDirection(step > currentStep ? "right" : "left");
     setCurrentStep(step);
   };
@@ -113,7 +184,11 @@ export default function PublicarJogo() {
   };
 
   // Função para avançar passo
-  const handleNext = () => {
+  const handleNext = async () => {
+    const fields = frameFields[currentStep];
+    const isValid = await trigger(fields);
+    if (!isValid) return;
+
     if (currentStep < totalSteps) {
       setDirection("right");
       setCurrentStep((prev) => prev + 1);
@@ -123,38 +198,43 @@ export default function PublicarJogo() {
   // Função para publicar
   const handlePublish = async () => {
     try {
+      const formData = methods.getValues();
+
+      // Corrigir para atender à interface do publishGame
       const gameData = {
-        nomeJogo,
-        bannerImage: bannerImage?.file || null,
-        iconImage: iconImage?.file || null,
-        images: images.map((img) => ({ file: img.file })),
-        devStatus,
-        ageRating,
-        descrição: text,
-        textTranslations: textTranslations.map((t) => ({ lingua: t.language })),
-        audioTranslations: audioTranslations.map((a) => ({
-          lingua: a.language,
+        nomeJogo: formData.nomeJogo,
+        bannerImage: formData.bannerImage?.file || null,
+        iconImage: formData.iconImage?.file || null,
+        images: formData.images.map((img) => ({ file: img.file })),
+        devStatus: formData.devStatus,
+        ageRating: formData.ageRating,
+        descrição: formData.text,
+        textTranslations: formData.textTranslations.map((t) => ({
+          lingua: t.language, // Corrigir propriedade para 'lingua'
         })),
-        sensitiveContents,
-        generos: genres,
-        tags,
-        plataforma,
-        principalFile: principalFile
+        audioTranslations: formData.audioTranslations.map((a) => ({
+          lingua: a.language, // Corrigir propriedade para 'lingua'
+        })),
+        sensitiveContents: formData.sensitiveContents,
+        generos: formData.genres,
+        tags: formData.tags,
+        plataforma: formData.plataforma,
+        principalFile: formData.principalFile
           ? {
-              name: principalFile.name,
-              size: principalFile.size,
-              version: principalFile.version,
+              name: formData.principalFile.name,
+              size: formData.principalFile.size,
+              version: formData.principalFile.version,
             }
           : null,
-        demoFile: demoFile
+        demoFile: formData.demoFile
           ? {
-              name: demoFile.name,
-              size: demoFile.size,
-              version: demoFile.version,
+              name: formData.demoFile.name,
+              size: formData.demoFile.size,
+              version: formData.demoFile.version,
             }
           : null,
-        isFree,
-        price: currencyValue,
+        isFree: formData.isFree,
+        price: formData.currencyValue || "",
       };
 
       await publishGame(gameData);
@@ -182,80 +262,83 @@ export default function PublicarJogo() {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.mainContainer}>
-        {/* Conteúdo do passo atual com animação */}
-        <div className={styles.contentContainer}>
-          <AnimatePresence mode="wait" initial={false} custom={direction}>
-            <motion.div
-              key={currentStep}
-              custom={direction}
-              variants={variants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{
-                type: "tween",
-                duration: 0.25,
-                ease: "easeInOut",
-              }}
-              className={styles.motionContainer}
-            >
-              {stepContents[currentStep - 1]}
+    <FormProvider {...methods}>
+      <div className={styles.container}>
+        <div className={styles.mainContainer}>
+          <div className={styles.contentContainer}>
+            <AnimatePresence mode="wait" initial={false} custom={direction}>
+              <motion.div
+                key={currentStep}
+                custom={direction}
+                variants={variants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{
+                  type: "tween",
+                  duration: 0.25,
+                  ease: "easeInOut",
+                }}
+                className={styles.motionContainer}
+              >
+                {stepContents[currentStep - 1]}
 
-              <div className={styles.navBTNS}>
-                {/* Botões de navegação */}
-                <div className={styles.buttonsContainer}>
-                  {[...Array(totalSteps)].map((_, index) => {
-                    const stepNumber = index + 1;
-                    return (
+                <div className={styles.navBTNS}>
+                  <div className={styles.buttonsContainer}>
+                    {[...Array(totalSteps)].map((_, index) => {
+                      const stepNumber = index + 1;
+                      return (
+                        <button
+                          key={stepNumber}
+                          className={`${styles.stepButton} ${
+                            currentStep === stepNumber ? styles.active : ""
+                          }`}
+                          onClick={() => handleStepChange(stepNumber)}
+                        >
+                          {stepNumber}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <div className={styles.navBTNConrainer}>
+                    {currentStep > 1 && (
                       <button
-                        key={stepNumber}
-                        className={`${styles.stepButton} ${
-                          currentStep === stepNumber ? styles.active : ""
-                        }`}
-                        onClick={() => handleStepChange(stepNumber)}
+                        className={styles.btnVoltar}
+                        onClick={handlePrevious}
                       >
-                        {stepNumber}
+                        VOLTAR
                       </button>
-                    );
-                  })}
+                    )}
+
+                    {currentStep < totalSteps && (
+                      <button
+                        className={styles.btnAvancar}
+                        onClick={handleNext}
+                      >
+                        AVANÇAR
+                      </button>
+                    )}
+
+                    {currentStep === totalSteps && (
+                      <button
+                        className={styles.btnPublicar}
+                        onClick={handlePublish}
+                      >
+                        PUBLICAR
+                      </button>
+                    )}
+                  </div>
                 </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
 
-                <div className={styles.navBTNConrainer}>
-                  {currentStep > 1 && (
-                    <button
-                      className={styles.btnVoltar}
-                      onClick={handlePrevious}
-                    >
-                      VOLTAR
-                    </button>
-                  )}
-
-                  {currentStep < totalSteps && (
-                    <button className={styles.btnAvancar} onClick={handleNext}>
-                      AVANÇAR
-                    </button>
-                  )}
-
-                  {currentStep === totalSteps && (
-                    <button
-                      className={styles.btnPublicar}
-                      onClick={handlePublish}
-                    >
-                      PUBLICAR
-                    </button>
-                  )}
-                </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        <div className={styles.previewContainer}>
-          <p>ALO</p>
+          <div className={styles.previewContainer}>
+            <p>ALO</p>
+          </div>
         </div>
       </div>
-    </div>
+    </FormProvider>
   );
 }

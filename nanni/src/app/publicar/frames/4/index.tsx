@@ -1,50 +1,39 @@
+// Frame4.tsx
 import { useRef, useState, ChangeEvent, useEffect } from "react";
-import styles from "./Frame4.module.css";
 import { FiCheckCircle, FiUpload, FiTrash2, FiX } from "react-icons/fi";
 import { FileInfo } from "@/types/Publicar";
+import { useFormContext } from "react-hook-form";
+import styles from "./Frame4.module.css";
 
-interface Frame4Props {
-  principalFile: FileInfo | null;
-  setPrincipalFile: (file: FileInfo | null) => void;
-  demoFile: FileInfo | null;
-  setDemoFile: (file: FileInfo | null) => void;
-  currencyValue: string;
-  setCurrencyValue: (value: string) => void;
-  isFree: boolean;
-  setIsFree: (value: boolean) => void;
-  noDemo: boolean;
-  setNoDemo: (value: boolean) => void;
-}
-
-export default function Frame4({
-  principalFile,
-  setPrincipalFile,
-  demoFile,
-  setDemoFile,
-  currencyValue,
-  setCurrencyValue,
-  isFree,
-  setIsFree,
-  noDemo,
-  setNoDemo,
-}: Frame4Props) {
+export default function Frame4() {
+  const {
+    register,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useFormContext();
   const principalInputRef = useRef<HTMLInputElement>(null);
   const demoInputRef = useRef<HTMLInputElement>(null);
 
-  // Estados para controlar as versões
+  // Obter valores do formulário
+  const principalFile = watch("principalFile");
+  const demoFile = watch("demoFile");
+  const currencyValue = watch("currencyValue");
+  const isFree = watch("isFree");
+  const noDemo = watch("noDemo");
+
+  // Estados locais para versões
   const [principalVersion, setPrincipalVersion] = useState("1.0.0");
   const [demoVersion, setDemoVersion] = useState("1.0.0");
 
-  // Atualiza versões quando arquivos são alterados
   useEffect(() => {
     if (!principalFile) setPrincipalVersion("1.0.0");
     if (!demoFile) {
       setDemoVersion("1.0.0");
-      setNoDemo(false);
+      setValue("noDemo", false);
     }
-  }, [principalFile, demoFile, setNoDemo]);
+  }, [principalFile, demoFile, setValue]);
 
-  // Formatação monetária (R$)
   const formatCurrency = (value: string): string => {
     const digits = value.replace(/\D/g, "");
     if (digits.length === 0) return "";
@@ -60,10 +49,9 @@ export default function Frame4({
   const handleCurrencyChange = (e: ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value;
     const formattedValue = formatCurrency(rawValue);
-    setCurrencyValue(formattedValue);
+    setValue("currencyValue", formattedValue, { shouldValidate: true });
   };
 
-  // Manipula o upload de arquivos
   const handleFileUpload = (isPrincipal: boolean, file: File | null) => {
     if (!file) return;
 
@@ -76,15 +64,10 @@ export default function Frame4({
       version: isPrincipal ? principalVersion : demoVersion,
     };
 
-    if (isPrincipal) {
-      setPrincipalFile(fileInfo);
-    } else {
-      setDemoFile(fileInfo);
-      setNoDemo(false);
-    }
+    const field = isPrincipal ? "principalFile" : "demoFile";
+    setValue(field, fileInfo, { shouldValidate: true });
   };
 
-  // Formata o tamanho do arquivo
   const formatFileSize = (bytes: number): string => {
     if (bytes === 0) return "0 Bytes";
     const k = 1024;
@@ -93,43 +76,69 @@ export default function Frame4({
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
-  // Remove o arquivo enviado
   const handleRemoveFile = (isPrincipal: boolean) => {
-    if (isPrincipal) {
-      setPrincipalFile(null);
-      if (principalInputRef.current) {
-        principalInputRef.current.value = "";
-      }
-    } else {
-      setDemoFile(null);
-      if (demoInputRef.current) {
-        demoInputRef.current.value = "";
-      }
+    const field = isPrincipal ? "principalFile" : "demoFile";
+    setValue(field, null, { shouldValidate: true });
+
+    if (isPrincipal && principalInputRef.current) {
+      principalInputRef.current.value = "";
+    } else if (demoInputRef.current) {
+      demoInputRef.current.value = "";
     }
   };
 
-  // Atualiza versão quando input muda
   const handleVersionChange = (
     e: ChangeEvent<HTMLInputElement>,
     isPrincipal: boolean,
   ) => {
     const newVersion = e.target.value;
+    const field = isPrincipal ? "principalFile" : "demoFile";
+
     if (isPrincipal) {
       setPrincipalVersion(newVersion);
       if (principalFile) {
-        setPrincipalFile({
-          ...principalFile,
-          version: newVersion,
-        });
+        setValue(
+          field,
+          { ...principalFile, version: newVersion },
+          { shouldValidate: true },
+        );
       }
     } else {
       setDemoVersion(newVersion);
       if (demoFile) {
-        setDemoFile({
-          ...demoFile,
-          version: newVersion,
-        });
+        setValue(
+          field,
+          { ...demoFile, version: newVersion },
+          { shouldValidate: true },
+        );
       }
+    }
+  };
+
+  const handleClearCurrency = () => {
+    setValue("currencyValue", "", { shouldValidate: true });
+  };
+
+  // Funções para lidar com mudanças nos checkboxes
+  const handleFreeCheckbox = (e: ChangeEvent<HTMLInputElement>) => {
+    const isChecked = e.target.checked;
+    setValue("isFree", isChecked, { shouldValidate: true });
+
+    if (isChecked) {
+      setValue("currencyValue", "", { shouldValidate: true });
+    }
+  };
+
+  const handleNoDemoCheckbox = (e: ChangeEvent<HTMLInputElement>) => {
+    const isChecked = e.target.checked;
+
+    // 1. Atualiza o valor do campo
+    setValue("noDemo", isChecked, { shouldValidate: true });
+
+    // 2. Se estiver marcado, limpa qualquer arquivo demo existente
+    if (isChecked) {
+      setValue("demoFile", null, { shouldValidate: true });
+      if (demoInputRef.current) demoInputRef.current.value = "";
     }
   };
 
@@ -202,6 +211,9 @@ export default function Frame4({
             </button>
           </>
         )}
+        {errors.principalFile?.message && (
+          <p className={styles.error}>{String(errors.principalFile.message)}</p>
+        )}
       </div>
 
       {/* Demo Section */}
@@ -221,7 +233,7 @@ export default function Frame4({
         {demoFile ? (
           <div className={styles.fileInfo}>
             <p>
-              {demoFile.name} | Tamanho: {demoFile.size} | Versão:{" "}
+              {demoFile.name} | Tamanho: {demoFile.formattedSize} | Versão:{" "}
               {demoFile.version}
             </p>
             <div className={styles.versionInputContainer}>
@@ -244,8 +256,8 @@ export default function Frame4({
               <label className={styles.checkboxLabel}>
                 <input
                   type="checkbox"
-                  checked={noDemo}
-                  onChange={() => setNoDemo(!noDemo)}
+                  {...register("noDemo")}
+                  onChange={handleNoDemoCheckbox}
                   className={styles.checkbox}
                 />
                 <span className={styles.checkboxText}>Não há versão demo</span>
@@ -285,6 +297,9 @@ export default function Frame4({
             )}
           </>
         )}
+        {errors.demoFile?.message && (
+          <p className={styles.error}>{String(errors.demoFile.message)}</p>
+        )}
       </div>
 
       {/* Valor Section */}
@@ -298,17 +313,12 @@ export default function Frame4({
               placeholder="R$ 0,00"
               value={isFree ? "R$ 0,00" : currencyValue}
               onChange={handleCurrencyChange}
-              onFocus={(e) => {
-                if (!e.target.value) {
-                  setCurrencyValue("R$ ");
-                }
-              }}
               disabled={isFree}
             />
             {currencyValue && !isFree && (
               <button
                 className={styles.clearButton}
-                onClick={() => setCurrencyValue("")}
+                onClick={handleClearCurrency}
               >
                 <FiX />
               </button>
@@ -317,16 +327,16 @@ export default function Frame4({
           <label className={styles.checkboxLabel}>
             <input
               type="checkbox"
+              {...register("isFree")}
+              onChange={handleFreeCheckbox}
               className={styles.checkbox}
-              checked={isFree}
-              onChange={(e) => {
-                setIsFree(e.target.checked);
-                if (e.target.checked) setCurrencyValue("");
-              }}
             />
             <span className={styles.checkboxText}>Gratuito</span>
           </label>
         </div>
+        {errors.currencyValue?.message && (
+          <p className={styles.error}>{String(errors.currencyValue.message)}</p>
+        )}
       </div>
     </div>
   );

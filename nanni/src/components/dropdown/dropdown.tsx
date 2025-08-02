@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 type DropdownProps = {
   opcoes: string[];
@@ -15,10 +15,6 @@ export default function Dropdown({
 }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    onChange(value);
-  }, [onChange, value]);
 
   function handleClick(opcao: string) {
     onChange(opcao);

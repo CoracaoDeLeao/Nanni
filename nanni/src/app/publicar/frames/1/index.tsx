@@ -1,73 +1,66 @@
 import AgeSelector from "@/components/seletorIdade/AgeSelector";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import styles from "./Frame1.module.css";
 import { FiPlus, FiPlusCircle, FiTrash2 } from "react-icons/fi";
 import { LuPen } from "react-icons/lu";
 import Dropdown from "@/components/dropdown/dropdown";
+import { useFormContext } from "react-hook-form";
 import { GalleryImage } from "@/types/Publicar";
-
-interface Frame1Props {
-  gameName: string;
-  setGameName: (name: string) => void;
-  bannerImage: { url: string; file: File } | null;
-  setBannerImage: React.Dispatch<
-    React.SetStateAction<{ url: string; file: File } | null>
-  >;
-  iconImage: { url: string; file: File } | null;
-  setIconImage: React.Dispatch<
-    React.SetStateAction<{ url: string; file: File } | null>
-  >;
-  images: GalleryImage[];
-  setImages: React.Dispatch<React.SetStateAction<GalleryImage[]>>;
-  onDevStatusSelected: (status: string) => void;
-  onAgeRatingSelected: (rating: string) => void;
-}
 
 const statusDev = ["PRE-ALPHA", "ALPHA", "BETA", "REALEASE"];
 
-export default function Frame1({
-  gameName,
-  setGameName,
-  bannerImage,
-  setBannerImage,
-  iconImage,
-  setIconImage,
-  images,
-  setImages,
-  onDevStatusSelected,
-  onAgeRatingSelected,
-}: Frame1Props) {
-  // Estados para os valores selecionados
-  const [devStatus, setDevStatus] = useState(statusDev[0]);
+export default function Frame1() {
+  const {
+    register,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useFormContext();
 
+  const [devStatusLocal, setDevStatusLocal] = useState(statusDev[0]);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [editIndex, setEditIndex] = useState<number | null>(null);
+
+  const bannerImage = watch("bannerImage") as {
+    url: string;
+    file: File;
+  } | null;
+  const iconImage = watch("iconImage") as { url: string; file: File } | null;
+  const rawImages = watch("images") as GalleryImage[] | undefined;
+  const images = useMemo(() => rawImages || [], [rawImages]);
+  const ageRating = watch("ageRating") as string;
 
   const bannerInputRef = useRef<HTMLInputElement>(null);
   const iconInputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const editInputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    if (ageRating === "") {
+      setValue("ageRating", "14", { shouldValidate: true });
+    }
+  }, [ageRating, setValue]);
+
   const handleImageUpload = (
     e: ChangeEvent<HTMLInputElement>,
-    setImage: (image: { url: string; file: File }) => void,
+    fieldName: "bannerImage" | "iconImage"
   ) => {
     const file = e.target.files?.[0];
     if (file) {
       const objectUrl = URL.createObjectURL(file);
-      setImage({ url: objectUrl, file });
+      setValue(fieldName, { url: objectUrl, file }, { shouldValidate: true });
     }
   };
 
   const handleImageUploadGallery = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const files = Array.from(e.target.files) as File[];
-      const newImages: GalleryImage[] = files.map((file) => ({
+      const newImages = files.map((file) => ({
         file,
         url: URL.createObjectURL(file),
       }));
-      setImages((prev) => [...prev, ...newImages]);
+      setValue("images", [...images, ...newImages], { shouldValidate: true });
     }
   };
 
@@ -75,17 +68,15 @@ export default function Frame1({
     if (!e.target.files?.[0] || editIndex === null) return;
 
     const file = e.target.files[0];
-    setImages((prev) => {
-      const newImages = [...prev];
-      URL.revokeObjectURL(newImages[editIndex].url);
-      newImages[editIndex] = {
-        file,
-        url: URL.createObjectURL(file),
-      };
-      return newImages;
-    });
+    const newImages = [...images];
+    URL.revokeObjectURL(newImages[editIndex].url);
+    newImages[editIndex] = {
+      file,
+      url: URL.createObjectURL(file),
+    };
+    setValue("images", newImages, { shouldValidate: true });
     setEditIndex(null);
-    e.target.value = "";
+    if (editInputRef.current) editInputRef.current.value = "";
   };
 
   const triggerFileInput = () => {
@@ -99,16 +90,24 @@ export default function Frame1({
 
   const handleRemoveImage = (index: number) => {
     URL.revokeObjectURL(images[index].url);
-    setImages((prev) => prev.filter((_, i) => i !== index));
+    const newImages = images.filter((_, i) => i !== index);
+    setValue("images", newImages, { shouldValidate: true });
   };
 
+  // Efeito para limpeza de URLs
   useEffect(() => {
+    const currentImages = [...images];
+
     return () => {
       if (bannerImage) URL.revokeObjectURL(bannerImage.url);
       if (iconImage) URL.revokeObjectURL(iconImage.url);
-      images.forEach((image) => URL.revokeObjectURL(image.url));
+      currentImages.forEach((image) => URL.revokeObjectURL(image.url));
     };
   }, [bannerImage, iconImage, images]);
+
+  useEffect(() => {
+    setValue("devStatus", devStatusLocal, { shouldValidate: true });
+  }, [devStatusLocal, setValue]);
 
   return (
     <div className={styles.formContainer}>
@@ -123,18 +122,30 @@ export default function Frame1({
         <input
           type="text"
           id="gameName"
-          name="gameName"
-          required
-          value={gameName}
-          onChange={(e) => setGameName(e.target.value)}
+          {...register("nomeJogo")}
+          className={`${styles.inputField} ${errors.nomeJogo ? styles.errorInput : ""}`}
           placeholder="Digite o nome do jogo"
-          className={styles.inputField}
         />
+        {errors.nomeJogo && (
+          <p className={styles.errorMessage}>
+            {String(errors.nomeJogo.message)}
+          </p>
+        )}
       </div>
 
       <div className={styles.section}>
         <label className={styles.label}>Classificação Indicativa</label>
-        <AgeSelector onChange={onAgeRatingSelected} />
+        <AgeSelector
+          onChange={(rating) =>
+            setValue("ageRating", rating, { shouldValidate: true })
+          }
+          value={ageRating}
+        />
+        {errors.ageRating && (
+          <p className={styles.errorMessage}>
+            {String(errors.ageRating.message)}
+          </p>
+        )}
       </div>
 
       <div className={styles.section}>
@@ -142,12 +153,14 @@ export default function Frame1({
         <Dropdown
           opcoes={statusDev}
           styles={styles}
-          onChange={(opcao) => {
-            setDevStatus(opcao);
-            onDevStatusSelected(opcao);
-          }}
-          value={devStatus}
+          onChange={(opcao) => setDevStatusLocal(opcao)}
+          value={devStatusLocal}
         />
+        {errors.devStatus && (
+          <p className={styles.errorMessage}>
+            {String(errors.devStatus.message)}
+          </p>
+        )}
       </div>
 
       <div className={styles.section}>
@@ -163,7 +176,7 @@ export default function Frame1({
                 accept="image/*"
                 ref={bannerInputRef}
                 style={{ display: "none" }}
-                onChange={(e) => handleImageUpload(e, setBannerImage)}
+                onChange={(e) => handleImageUpload(e, "bannerImage")}
               />
               {bannerImage ? (
                 <div className={styles.imageWrapper}>
@@ -182,6 +195,11 @@ export default function Frame1({
                 </div>
               )}
             </div>
+            {errors.bannerImage && (
+              <p className={styles.errorMessage}>
+                {String(errors.bannerImage.message)}
+              </p>
+            )}
           </div>
 
           <div className={styles.imageUploadGroup}>
@@ -194,7 +212,7 @@ export default function Frame1({
                 accept="image/*"
                 ref={iconInputRef}
                 style={{ display: "none" }}
-                onChange={(e) => handleImageUpload(e, setIconImage)}
+                onChange={(e) => handleImageUpload(e, "iconImage")}
               />
               {iconImage ? (
                 <div className={styles.imageWrapper}>
@@ -213,6 +231,11 @@ export default function Frame1({
                 </div>
               )}
             </div>
+            {errors.iconImage && (
+              <p className={styles.errorMessage}>
+                {String(errors.iconImage.message)}
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -276,6 +299,11 @@ export default function Frame1({
               ))
             )}
           </div>
+          {errors.images && (
+            <p className={styles.errorMessage}>
+              {String(errors.images.message)}
+            </p>
+          )}
         </div>
       </div>
 
