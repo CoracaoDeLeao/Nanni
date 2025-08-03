@@ -16,11 +16,13 @@ export default function HeaderSearchBar() {
     const value = inputRef.current?.value.trim();
     if (!value) return;
 
-    const query = searchParams.get("q") ?? "";
+    const strParams = searchParams.toString();
+    if (pathname === "/buscar" && strParams === value) return;
 
-    if (pathname === "/buscar" && query === value) return;
+    const query = new URLSearchParams(searchParams.toString());
+    query.set("q", value);
 
-    router.push(`/buscar?q=${encodeURIComponent(value)}`);
+    router.push(`/buscar?${query.toString()}`);
   };
 
   return (

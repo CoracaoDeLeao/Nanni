@@ -10,27 +10,31 @@ import { db } from "../Firebase";
 import { COLLECTIONS } from "@/constants/FirebaseCollections";
 import { JogoItemProps } from "@/types/JogoItemProps";
 
-export type SearchJogoProps = {
-  qNome?: string;
+type SearchJogoProps = {
   qLimit: number;
+  qPrimeiraLetra?: string;
+  qNome?: string;
+  qPrecoRange?: number[];
 };
 
-type FilterJogoProps = {
-  qPriceRange?: number[];
-  searchProps: SearchJogoProps;
-};
-
-export async function SearchJogo(
-  values: SearchJogoProps,
-): Promise<JogoItemProps[] | undefined> {
+export async function SearchJogo({
+  qLimit,
+  qPrimeiraLetra,
+  qPrecoRange,
+}: SearchJogoProps): Promise<JogoItemProps[] | undefined> {
   try {
     const jogoDoc = collection(db, COLLECTIONS.JOGOS);
     const args = [];
     args.push(orderBy("_primeiraLetra"));
-    args.push(limit(values.qLimit));
+    args.push(limit(qLimit));
 
-    if (typeof values.qNome === "string") {
-      args.push(where("_primeiraLetra", "==", values.qNome.charAt(0)));
+    if (qPrimeiraLetra && qPrimeiraLetra.length > 0) {
+      args.push(where("_primeiraLetra", "==", qPrimeiraLetra));
+    }
+
+    if (qPrecoRange) {
+      if (qPrecoRange[0]) args.push(where("preco", ">=", qPrecoRange[0]));
+      if (qPrecoRange[1]) args.push(where("preco", "<=", qPrecoRange[1]));
     }
 
     const jogoQuery = query(jogoDoc, ...args);
@@ -49,33 +53,31 @@ export async function SearchJogo(
   }
 }
 
-export async function filterSearchJogo({
-  qPriceRange,
-  searchProps,
-}: FilterJogoProps): Promise<JogoItemProps[] | undefined> {
-  const raw: JogoItemProps[] | undefined = await SearchJogo(searchProps);
+export async function FilterSearchJogo({
+  qLimit,
+  qPrimeiraLetra,
+  qNome,
+  qPrecoRange,
+}: SearchJogoProps): Promise<JogoItemProps[] | undefined> {
+  const data = await SearchJogo({ qLimit, qPrecoRange, qPrimeiraLetra });
 
-  if (!raw) return;
-  if (raw.length === 1) return raw;
-  if (typeof qNome !== "string") return raw;
+  if (!data) return;
 
-  const filteredData: JogoItemProps[] = raw.filter((item) => {
-    let passou = true;
+  let filteredData: JogoItemProps[] = data;
+  if (qNome) {
+    const lowerQNome = qNome.toLowerCase();
+    const arrNome: string[] = lowerQNome.split(" ");
 
-    if (qPriceRange && qPriceRange.length === 2) {
-      if (item.preco < qPriceRange[0] || item.preco > qPriceRange[1]) {
-        passou = false;
+    filteredData = filteredData.filter((item) => {
+      const arrItemNome = item.nome.toLowerCase().split(" ");
+
+      if (arrNome.length > 1) {
+        return arrNome.some((str) => arrItemNome.includes(str));
       }
-    }
 
-    if (qNome && qNome.length > 1) {
-      if (!item.nome.toLowerCase().includes(qNome)) {
-        passou = false;
-      }
-    }
-
-    return passou;
-  });
+      return item.nome.toLowerCase().includes(lowerQNome);
+    });
+  }
 
   return filteredData;
 }
