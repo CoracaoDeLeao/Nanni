@@ -1,0 +1,32 @@
+.searchbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 30%;
+  border: 1px solid var(--black);
+  border-radius: 6px;
+  margin: 0;
+  padding: 8px;
+  background-color: white;
+}
+
+.searchbar--focused {
+  border-color: var(--p1);
+}
+
+.searchbar__icon {
+  fill: var(--foreground);
+}
+
+.searchbar__icon:hover {
+  cursor: pointer;
+}
+
+.searchbar__input {
+  width: 100%;
+  border: 0;
+}
+
+.searchbar__input:focus {
+  outline: none;
+}

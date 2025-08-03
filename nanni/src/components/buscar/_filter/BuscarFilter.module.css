@@ -1,0 +1,63 @@
+.filter {
+  position: relative;
+  transition: width 0.4s ease;
+}
+
+.filter__icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  margin-bottom: 5px;
+  border-radius: 10px;
+  user-select: none;
+}
+
+.filter__icon:hover {
+  cursor: pointer;
+}
+
+.filter__icon--closed {
+  color: var(--white);
+  fill: var(--white);
+}
+
+.filter__icon--open {
+  color: var(--foreground);
+  fill: var(--foreground);
+  background-color: var(--white);
+}
+
+.filter__icon--open > p {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.filter-list {
+  z-index: 5;
+  position: absolute;
+  min-width: 400px;
+  width: 100%;
+  right: 2px;
+  padding: 20px;
+  padding-top: 10px;
+  border: 1px solid var(--p5);
+  border-radius: 5px;
+  background-color: var(--white);
+}
+
+.filter-list__titulo {
+  padding-bottom: 4px;
+  padding-top: 10px;
+  font-size: 16px;
+  color: var(--foreground);
+}
+
+.filter-list__submit {
+  width: 100%;
+  padding-top: 20px;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: underline;
+  color: var(--p3);
+}

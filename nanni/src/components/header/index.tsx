@@ -1,15 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
+import styles from "./Header.module.css";
+import { HeaderPerfil } from "./_perfil";
+import HeaderSearchBar from "./_searchbar";
 
 export function Header() {
-  const userNome = "Nome do Usuário";
-
   return (
-    <header className="padding-horizontal-global">
-      <div className="header-superior">
+    <header
+      className={`${styles["header"]} ${styles["padding-horizontal-global"]}`}
+    >
+      <div className={styles["header-superior"]}>
         <Link href="/">
           <Image
-            src={"logo.svg"}
+            src={"/logo.svg"}
             alt={"Logo"}
             quality={100}
             width={110}
@@ -17,20 +20,10 @@ export function Header() {
             style={{ height: "auto" }}
           />
         </Link>
+        <HeaderSearchBar />
       </div>
-      <div className="header-perfil">
-        <p>{userNome}</p>
-        <div className="header-perfil-imagem">
-          <Image
-            src={"file.svg"}
-            alt={"Foto de Perfil"}
-            width={70}
-            height={70}
-            style={{ height: "auto" }}
-          />
-        </div>
-      </div>
-      <div className="header-inferior">
+      <HeaderPerfil />
+      <div className={styles["header-inferior"]}>
         <ul>
           <li>Biblioteca</li>
           <li>Lista de Desejos</li>

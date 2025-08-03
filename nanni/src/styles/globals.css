@@ -11,7 +11,9 @@
   --background: #daeafa;
   --foreground: #071934;
   --white: #fff;
+  --black: #000;
   --p3: #1d5db5;
+  --p4: #5d90d6;
   --p5: #b484ac;
   --shadow-color: #98a9e3;
 }
@@ -37,60 +39,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-header {
-  position: relative;
-  background-color: var(--foreground);
-  color: var(--white);
-  padding: 0 var(--padding-horizontal-global);
-}
-
-.header-superior {
-  display: flex;
-  padding-top: 5px;
-}
-
-.header-inferior {
-  margin-top: 10px;
-  padding-bottom: 0.5px;
-}
-
-.header-inferior > ul > li {
-  display: inline-block;
-  box-shadow: 0 0 0 0 var(--p3);
-  padding: 7px 45px;
-  background-color: var(--foreground);
-  transition: box-shadow 0.3s ease;
-}
-
-.header-inferior > ul > li:hover {
-  transform: translate(
-    calc(-1 * var(--container-radius-global)),
-    calc(-1 * var(--container-radius-global))
-  );
-  box-shadow: var(--container-radius-global) var(--container-radius-global) 0 0
-    var(--p3);
-  cursor: pointer;
-}
-
-.header-perfil {
-  display: flex;
-}
-
-.header-perfil > * {
-  position: absolute;
-  right: var(--padding-horizontal-global);
-  top: 25;
-}
-
-.header-perfil > p {
-  font-weight: var(--semi-bold);
-  right: calc(var(--padding-horizontal-global) + 85px);
-  top: 50;
-}
-
-.header-perfil-imagem > * {
-  border-radius: 100%;
-  border: 2px solid var(--background);
+p,
+h3 {
+  color: var(--black);
+  /* font-size: 16px; Definir depois, mas vai precisar configurar font-size em todos os outros componentes*/
 }
 
 .padding-horizontal-global {
@@ -106,6 +58,9 @@ header {
   max-width: 100%;
   margin: calc(var(--padding-horizontal-global) / 2)
     var(--padding-horizontal-global);
+}
+
+.g-padding {
   padding: var(--padding-horizontal-global);
 }
 

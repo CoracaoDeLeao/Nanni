@@ -5,15 +5,15 @@ import { AuthProvider } from "@/context/AuthContextProvider";
 import { Header } from "@/components/header";
 
 // Talvez seja isso que está dando erro de fonte no firefox
-// const geistSans = Geist({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
-// });
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
 
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: "Nanni",
@@ -27,11 +27,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body>
-        <AuthProvider>
-          <Header />
-          {children}
-        </AuthProvider>
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <Header />
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );
