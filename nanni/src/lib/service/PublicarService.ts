@@ -2,7 +2,7 @@ import { db } from "@/lib/Firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import axios from "axios";
 import { COLLECTIONS } from "@/constants/FirebaseCollections";
-import { GameDoc, GameVersion } from "@/types/NovoJogo";
+import { GameDoc, GameVersion } from "@/types/Jogo";
 
 // Manter interface para os dados de entrada
 interface PublishGameData {
@@ -22,7 +22,7 @@ interface PublishGameData {
   principalFile: { name: string; size: number; version: string } | null;
   demoFile: { name: string; size: number; version: string } | null;
   isFree: boolean;
-  price: string;
+  price: number;
 }
 
 // Função para fazer upload de imagens para o ImageBB
@@ -54,7 +54,7 @@ export const publishGame = async (gameData: PublishGameData) => {
       ...gameData.images.map((img) => uploadImageToImageBB(img.file)),
     ]);
 
-    // 2. Preparar as versões (apenas metadados)
+    // 2. Preparar as versões
     const versoes: GameVersion[] = [];
 
     if (gameData.principalFile) {
@@ -63,7 +63,7 @@ export const publishGame = async (gameData: PublishGameData) => {
         tamanho: gameData.principalFile.size,
         versao: gameData.principalFile.version,
         eDemo: false,
-        data: serverTimestamp(),
+        data: new Date(),
       });
     }
 
@@ -73,7 +73,7 @@ export const publishGame = async (gameData: PublishGameData) => {
         tamanho: gameData.demoFile.size,
         versao: gameData.demoFile.version,
         eDemo: true,
-        data: serverTimestamp(),
+        data: new Date(),
       });
     }
 
@@ -86,14 +86,14 @@ export const publishGame = async (gameData: PublishGameData) => {
       statusDev: gameData.devStatus,
       classificacaoIndicativa: gameData.ageRating,
       sobre: gameData.descrição,
-      traducaoTexto: gameData.textTranslations.map(t => t.lingua),
-      traducaoAudio: gameData.audioTranslations.map(a => a.lingua),
+      traducaoTexto: gameData.textTranslations.map((t) => t.lingua),
+      traducaoAudio: gameData.audioTranslations.map((a) => a.lingua),
       contSensivel: gameData.sensitiveContents,
       generos: gameData.generos,
       tags: gameData.tags,
       plataforma: gameData.plataforma,
       versoes,
-      preco: gameData.isFree ? "Gratis" : gameData.price,
+      preco: gameData.isFree ? 0 : gameData.price || 0,
       data: serverTimestamp(),
     };
 

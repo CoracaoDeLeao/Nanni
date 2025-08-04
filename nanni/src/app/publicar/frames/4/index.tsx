@@ -25,6 +25,7 @@ export default function Frame4() {
   // Estados locais para versões
   const [principalVersion, setPrincipalVersion] = useState("1.0.0");
   const [demoVersion, setDemoVersion] = useState("1.0.0");
+  const [displayCurrencyValue, setDisplayCurrencyValue] = useState(""); // Valor formatado para exibição
 
   useEffect(() => {
     if (!principalFile) setPrincipalVersion("1.0.0");
@@ -34,11 +35,17 @@ export default function Frame4() {
     }
   }, [principalFile, demoFile, setValue]);
 
-  const formatCurrency = (value: string): string => {
-    const digits = value.replace(/\D/g, "");
-    if (digits.length === 0) return "";
-    const number = Number(digits) / 100;
-    return number.toLocaleString("pt-BR", {
+  // Atualiza o valor de exibição quando o valor bruto muda
+  useEffect(() => {
+    if (currencyValue !== null && currencyValue !== undefined) {
+      setDisplayCurrencyValue(formatCurrency(currencyValue));
+    } else {
+      setDisplayCurrencyValue("");
+    }
+  }, [currencyValue]);
+
+  const formatCurrency = (value: number): string => {
+    return value.toLocaleString("pt-BR", {
       style: "currency",
       currency: "BRL",
       minimumFractionDigits: 2,
@@ -46,10 +53,13 @@ export default function Frame4() {
     });
   };
 
-  const handleCurrencyChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const rawValue = e.target.value;
-    const formattedValue = formatCurrency(rawValue);
-    setValue("currencyValue", formattedValue, { shouldValidate: true });
+  const handleCurrencyInput = (e: ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value.replace(/\D/g, "");
+    const cents = parseInt(rawValue, 10) || 0;
+    
+    // Salva o valor bruto (em centavos)
+    const realValue = cents / 100;
+    setValue("currencyValue", realValue, { shouldValidate: true });
   };
 
   const handleFileUpload = (isPrincipal: boolean, file: File | null) => {
@@ -116,26 +126,23 @@ export default function Frame4() {
   };
 
   const handleClearCurrency = () => {
-    setValue("currencyValue", "", { shouldValidate: true });
+    setValue("currencyValue", 0, { shouldValidate: true });
+    setDisplayCurrencyValue("");
   };
 
-  // Funções para lidar com mudanças nos checkboxes
   const handleFreeCheckbox = (e: ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
     setValue("isFree", isChecked, { shouldValidate: true });
 
     if (isChecked) {
-      setValue("currencyValue", "", { shouldValidate: true });
+      setValue("currencyValue", 0, { shouldValidate: true });
     }
   };
 
   const handleNoDemoCheckbox = (e: ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
-
-    // 1. Atualiza o valor do campo
     setValue("noDemo", isChecked, { shouldValidate: true });
 
-    // 2. Se estiver marcado, limpa qualquer arquivo demo existente
     if (isChecked) {
       setValue("demoFile", null, { shouldValidate: true });
       if (demoInputRef.current) demoInputRef.current.value = "";
@@ -311,11 +318,11 @@ export default function Frame4() {
               type="text"
               className={styles.currencyInput}
               placeholder="R$ 0,00"
-              value={isFree ? "R$ 0,00" : currencyValue}
-              onChange={handleCurrencyChange}
+              value={isFree ? "R$ 0,00" : displayCurrencyValue}
+              onChange={handleCurrencyInput}
               disabled={isFree}
             />
-            {currencyValue && !isFree && (
+            {displayCurrencyValue && !isFree && (
               <button
                 className={styles.clearButton}
                 onClick={handleClearCurrency}

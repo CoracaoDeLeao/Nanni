@@ -88,7 +88,7 @@ const formSchema = z
       })
       .optional()
       .nullable(),
-    currencyValue: z.string().optional(),
+    currencyValue: z.number().optional(),
     isFree: z.boolean(),
     noDemo: z.boolean(),
   })
@@ -122,7 +122,7 @@ export default function PublicarJogo() {
       plataforma: "",
       principalFile: null,
       demoFile: null,
-      currencyValue: "",
+      currencyValue: 0,
       isFree: false,
       noDemo: false,
     },
@@ -235,7 +235,7 @@ export default function PublicarJogo() {
             }
           : null,
         isFree: formData.isFree,
-        price: formData.currencyValue || "",
+        price: formData.currencyValue || 0,
       };
 
       await publishGame(gameData);

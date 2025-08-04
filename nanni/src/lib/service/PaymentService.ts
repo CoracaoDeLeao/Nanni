@@ -27,35 +27,25 @@ export interface SaleData {
   data: Timestamp | FieldValue; // Timestamp do servidor
 }
 
-// Função para buscar preço do produto
-async function getProductPrice(productId: string) {
-  const productRef = doc(db, COLLECTIONS.JOGOS, productId);
-  const productSnap = await getDoc(productRef);
-
-  if (!productSnap.exists()) {
-    throw new Error(`Produto não encontrado: ${productId}`);
-  }
-
-  const productData = productSnap.data();
-  return productData.preco;
-}
-
 // Função principal para processar venda
-export async function processSale(userID: string, cartItems: CartItem[]) {
+export async function processSale(
+  userID: string,
+  cartItems: CartItem[],
+  total: number
+) {
   try {
-    let total = 0;
     const purchasedItems: PurchasedItem[] = [];
     const userRef = doc(db, COLLECTIONS.USERS, userID);
 
     // Processar cada item do carrinho (cada ID é um produto)
     for (const productId of cartItems) {
-      const productPrice = await getProductPrice(productId);
-
-      // Cada produto adiciona seu preço ao total
-      total += productPrice;
-
       // Criar referência ao documento do produto
       const productRef = doc(db, COLLECTIONS.JOGOS, productId);
+      const productSnap = await getDoc(productRef);
+
+      if (!productSnap.exists()) {
+        throw new Error(`Produto não encontrado: ${productId}`);
+      }
 
       purchasedItems.push({
         productRef,
@@ -104,7 +94,7 @@ export async function getCompleteSale(saleId: string) {
             id: item.productRef.id,
             ...productSnap.data(),
           };
-        }),
+        })
       );
 
       return {

@@ -6,7 +6,7 @@ export type GameVersion = {
   tamanho: number;
   versao: string;
   eDemo: boolean;
-  data: FieldValue | Date;
+  data: Date;
 };
 
 // Tipo principal do documento do jogo
@@ -25,6 +25,6 @@ export type GameDoc = {
   tags: string[];
   plataforma: string;
   versoes: GameVersion[];
-  preco: string | number;
-  data: FieldValue | Date;
+  preco: number;
+  data: FieldValue;
 }
