@@ -4,7 +4,7 @@ import Image from "next/image";
 import JogosGaleria from "../carrossel";
 import { BsStarFill } from "react-icons/bs";
 import { JogosAvaliacao } from "../events/avaliacao";
-import { JogosPreco } from "../events/preco";
+import { JogoPreco } from "../events/preco";
 import { colorStatusDev } from "../cores_status";
 import { getAvaliacoes } from "@/lib/service/JogoService";
 import { JogosTabs } from "../tabs";
@@ -61,7 +61,7 @@ export default async function DetailJogoContent({
                 paddingRight={50}
                 styleButton={styles["jogos-botoes-avaliacao"]}
               />
-              <JogosPreco id={jogo.id} preco={jogo.preco} />
+              <JogoPreco preco={Number(jogo.preco)} />
             </div>
           </div>
         </div>
