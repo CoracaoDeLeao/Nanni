@@ -20,7 +20,9 @@ export function Header() {
             style={{ height: "auto" }}
           />
         </Link>
-        <HeaderSearchBar />
+        <div style={{ width: "40%"}}>
+          <HeaderSearchBar />
+        </div>
       </div>
       <HeaderPerfil />
       <div className={styles["header-inferior"]}>

@@ -15,12 +15,14 @@ type SearchJogoProps = {
   qPrimeiraLetra?: string;
   qNome?: string;
   qPrecoRange?: number[];
+  qTags?: string[];
 };
 
 export async function SearchJogo({
   qLimit,
   qPrimeiraLetra,
   qPrecoRange,
+  qTags,
 }: SearchJogoProps): Promise<JogoItemProps[] | undefined> {
   try {
     const jogoDoc = collection(db, COLLECTIONS.JOGOS);
@@ -35,6 +37,10 @@ export async function SearchJogo({
     if (qPrecoRange) {
       if (qPrecoRange[0]) args.push(where("preco", ">=", qPrecoRange[0]));
       if (qPrecoRange[1]) args.push(where("preco", "<=", qPrecoRange[1]));
+    }
+
+    if (qTags && qTags.length > 0 && qTags[0]) {
+      args.push(where("tags", "array-contains-any", qTags));
     }
 
     const jogoQuery = query(jogoDoc, ...args);
@@ -58,9 +64,10 @@ export async function FilterSearchJogo({
   qPrimeiraLetra,
   qNome,
   qPrecoRange,
+  qTags,
 }: SearchJogoProps): Promise<JogoItemProps[] | undefined> {
-  const data = await SearchJogo({ qLimit, qPrecoRange, qPrimeiraLetra });
-
+  const data = await SearchJogo({ qLimit, qPrecoRange, qPrimeiraLetra, qTags });
+  console.log(data);
   if (!data) return;
 
   let filteredData: JogoItemProps[] = data;
