@@ -1,14 +1,28 @@
 import { db } from "@/lib/Firebase";
-import { addDoc, collection, FieldValue, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import axios from "axios";
 import { COLLECTIONS } from "@/constants/FirebaseCollections";
+import { GameDoc, GameVersion } from "@/types/NovoJogo";
 
-interface GameVersion {
-  nomeArquivo: string;
-  tamanho: number;
-  versao: string;
-  eDemo: boolean;
-  data: FieldValue;
+// Manter interface para os dados de entrada
+interface PublishGameData {
+  nomeJogo: string;
+  bannerImage: File | null;
+  iconImage: File | null;
+  images: { file: File }[];
+  devStatus: string;
+  ageRating: string;
+  descrição: string;
+  textTranslations: { lingua: string }[];
+  audioTranslations: { lingua: string }[];
+  sensitiveContents: string[];
+  generos: string[];
+  tags: string[];
+  plataforma: string;
+  principalFile: { name: string; size: number; version: string } | null;
+  demoFile: { name: string; size: number; version: string } | null;
+  isFree: boolean;
+  price: string;
 }
 
 // Função para fazer upload de imagens para o ImageBB
@@ -27,25 +41,7 @@ const uploadImageToImageBB = async (file: File): Promise<string> => {
 };
 
 // Função principal para publicar o jogo
-export const publishGame = async (gameData: {
-  nomeJogo: string;
-  bannerImage: File | null;
-  iconImage: File | null;
-  images: { file: File }[];
-  devStatus: string;
-  ageRating: string;
-  descrição: string;
-  textTranslations: { lingua: string }[];
-  audioTranslations: { lingua: string }[];
-  sensitiveContents: string[];
-  generos: string[];
-  tags: string[];
-  plataforma: string;
-  principalFile: { name: string; size: number; version: string } | null;
-  demoFile: { name: string; size: number; version: string } | null;
-  isFree: boolean;
-  price: string;
-}) => {
+export const publishGame = async (gameData: PublishGameData) => {
   try {
     // 1. Upload de imagens para o ImageBB
     const [bannerUrl, iconUrl, ...galleryUrls] = await Promise.all([
@@ -82,7 +78,7 @@ export const publishGame = async (gameData: {
     }
 
     // 3. Criar documento no Firestore
-    const gameDoc = {
+    const gameDoc: GameDoc = {
       nome: gameData.nomeJogo,
       banner: bannerUrl,
       icone: iconUrl,
@@ -90,8 +86,8 @@ export const publishGame = async (gameData: {
       statusDev: gameData.devStatus,
       classificacaoIndicativa: gameData.ageRating,
       sobre: gameData.descrição,
-      traducaoTexto: gameData.textTranslations,
-      traducaoAudio: gameData.audioTranslations,
+      traducaoTexto: gameData.textTranslations.map(t => t.lingua),
+      traducaoAudio: gameData.audioTranslations.map(a => a.lingua),
       contSensivel: gameData.sensitiveContents,
       generos: gameData.generos,
       tags: gameData.tags,

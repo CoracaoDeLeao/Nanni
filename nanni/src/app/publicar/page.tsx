@@ -201,7 +201,7 @@ export default function PublicarJogo() {
       setIsPublishing(true);
       const formData = methods.getValues();
 
-      // Corrigir para atender à interface do publishGame
+      // Objeto raw do jogo
       const gameData = {
         nomeJogo: formData.nomeJogo,
         bannerImage: formData.bannerImage?.file || null,
@@ -211,10 +211,10 @@ export default function PublicarJogo() {
         ageRating: formData.ageRating,
         descrição: formData.text,
         textTranslations: formData.textTranslations.map((t) => ({
-          lingua: t.language, // Corrigir propriedade para 'lingua'
+          lingua: t.language,
         })),
         audioTranslations: formData.audioTranslations.map((a) => ({
-          lingua: a.language, // Corrigir propriedade para 'lingua'
+          lingua: a.language,
         })),
         sensitiveContents: formData.sensitiveContents,
         generos: formData.genres,
