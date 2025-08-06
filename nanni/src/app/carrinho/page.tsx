@@ -5,80 +5,21 @@ import Image from "next/image";
 import styles from "./Carrinho.module.css";
 import {
   FiArrowLeft,
-  FiCheckCircle,
   FiShoppingBag,
   FiShoppingCart,
   FiTrash2,
 } from "react-icons/fi";
-import { processSale } from "@/lib/service/PaymentService";
 import { fetchJogos } from "@/lib/service/JogoService";
 import { JogoProps } from "@/types/JogoProps";
 import { useRouter } from "next/navigation";
 import { CartService } from "@/lib/service/CarrinhoService";
 
-type TransactionStatus = "idle" | "processing" | "success";
-
-// Interface para o estado da venda
-interface SaleDataState {
-  saleId: string;
-  total: number;
-}
-
-// Componente para exibir o status da transação
-const TransactionStatus = ({ 
-  status,
-  saleData 
-}: { 
-  status: "processing" | "success";
-  saleData?: SaleDataState | null;
-}) => {
-  const router = useRouter();
-
-  if (status === "processing") {
-    return (
-      <div className={styles.processingContainer}>
-        <div className={styles.spinner}></div>
-        <h2>Estamos processando o seu pagamento</h2>
-        <p>Por favor, aguarde enquanto finalizamos sua compra...</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className={styles.successContainer}>
-      <FiCheckCircle className={styles.successIcon} />
-      <h2>Compra realizada com sucesso!</h2>
-      <div className={styles.transactionInfo}>
-        <p>
-          <strong>ID da transação:</strong> {saleData?.saleId || "N/A"}
-        </p>
-        <p>
-          <strong>Valor total:</strong>
-          {(saleData?.total ?? 0).toLocaleString("pt-BR", {
-            style: "currency",
-            currency: "BRL",
-          })}
-        </p>
-      </div>
-      <button
-        className={styles.continueButton}
-        onClick={() => router.push("/")}
-      >
-        <FiArrowLeft className={styles.arrowIcon} />
-        Voltar às compras
-      </button>
-    </div>
-  );
-};
-
 export default function Carrinho() {
   const router = useRouter();
-  const [transactionStatus, setTransactionStatus] = useState<TransactionStatus>("idle");
   const [error, setError] = useState<string | null>(null);
-  const [saleData, setSaleData] = useState<SaleDataState | null>(null);
   const [cartGames, setCartGames] = useState<JogoProps[]>([]);
   const [loading, setLoading] = useState(true);
-  const [cartItemIds, setCartItemIds] = useState<string[]>([]);
+  const [isNavigating, setIsNavigating] = useState(false);
 
   const userId = "T0EYcPo4RHUnUlHJ3SJcWgepzPJ2";
 
@@ -89,7 +30,6 @@ export default function Carrinho() {
       try {
         // Buscar IDs do carrinho usando o serviço
         const items = await CartService.getCartItems(userId);
-        setCartItemIds(items);
 
         // Buscar detalhes dos jogos
         if (items.length > 0) {
@@ -116,7 +56,6 @@ export default function Carrinho() {
       await CartService.removeCartItem(userId, gameId);
 
       // Atualizar estado local
-      setCartItemIds((prev) => prev.filter((id) => id !== gameId));
       setCartGames((prev) => prev.filter((game) => game.id !== gameId));
     } catch (error) {
       console.error("Erro ao remover item:", error);
@@ -130,39 +69,20 @@ export default function Carrinho() {
     return sum + parseFloat(game.preco);
   }, 0);
 
-  // Função para finalizar a compra
-  const handleCheckout = async () => {
-    setTransactionStatus("processing");
-    setError(null);
+  // Função para finalizar a compra (redireciona para checkout)
+  const handleCheckout = () => {
+    if (cartGames.length === 0) {
+      setError("Seu carrinho está vazio");
+      return;
+    }
 
     try {
-      // Adicionar pequeno delay para melhor experiência do usuário
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Processar pagamento com os IDs dos produtos
-      const result = await processSale(userId, cartItemIds, total);
-
-      if (result.success) {
-        setSaleData({
-          saleId: result.saleId!,
-          total: result.valorTotal!,
-        });
-        await CartService.clearCart(userId);
-        setCartItemIds([]);
-        setCartGames([]);
-        setTransactionStatus("success");
-      } else {
-        throw new Error(result.error || "Erro desconhecido no pagamento");
-      }
-    } catch (err: unknown) {
-      setTransactionStatus("idle");
-      let errorMessage = "Erro ao processar pagamento";
-      if (err instanceof Error) {
-        errorMessage = err.message;
-      } else if (typeof err === "string") {
-        errorMessage = err;
-      }
-      setError(errorMessage);
+      setIsNavigating(true);
+      router.push("/checkout");
+    } catch (err) {
+      console.error("Erro ao navegar para checkout:", err);
+      setError("Falha ao acessar o checkout");
+      setIsNavigating(false);
     }
   };
 
@@ -175,11 +95,6 @@ export default function Carrinho() {
           <div className={styles.spinner}></div>
           <p>Carregando seu carrinho...</p>
         </div>
-      ) : transactionStatus === "processing" || transactionStatus === "success" ? (
-        <TransactionStatus 
-          status={transactionStatus} 
-          saleData={saleData} 
-        />
       ) : (
         <div className={styles.content}>
           {/* Container do carrinho */}
@@ -278,13 +193,13 @@ export default function Carrinho() {
               <button
                 className={styles.checkoutButton}
                 onClick={handleCheckout}
-                disabled={transactionStatus !== "idle" || cartGames.length === 0}
+                disabled={cartGames.length === 0 || isNavigating}
               >
-                {(transactionStatus as string) === "processing" ? (
-                  <>
-                    <div className={styles.buttonSpinner}></div>
-                    Processando...
-                  </>
+                {isNavigating ? (
+                  <div
+                    className={styles.spinner}
+                    style={{ width: 20, height: 20 }}
+                  ></div>
                 ) : (
                   "Finalizar Compra"
                 )}

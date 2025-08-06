@@ -25,13 +25,15 @@ export interface SaleData {
   valorTotal: number;
   itemsComprados: PurchasedItem[];
   data: Timestamp | FieldValue; // Timestamp do servidor
+  metodoPagamento: string;
 }
 
 // Função principal para processar venda
 export async function processSale(
   userID: string,
   cartItems: CartItem[],
-  total: number
+  total: number,
+  selectedMethod: string,
 ) {
   try {
     const purchasedItems: PurchasedItem[] = [];
@@ -58,6 +60,7 @@ export async function processSale(
       valorTotal: total,
       itemsComprados: purchasedItems,
       data: serverTimestamp(),
+      metodoPagamento: selectedMethod,
     };
 
     // Salvar no Firestore
@@ -102,6 +105,7 @@ export async function getCompleteSale(saleId: string) {
         id: saleSnap.id,
         itemsComprados: products,
         data: saleData.data.toDate(), // Converter timestamp para Date
+        metodoPagamento: saleData.metodoPagamento
       };
     }
   } catch (error) {
