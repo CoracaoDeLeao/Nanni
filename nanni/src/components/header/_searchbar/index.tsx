@@ -29,7 +29,6 @@ export default function HeaderSearchBar() {
     <SearchBar
       inputRef={inputRef}
       placeholder={"Buscar jogo"}
-      containerStyle={styles["header-superior__searchbar"]}
       onButtonClick={handlePesquisa}
     />
   );

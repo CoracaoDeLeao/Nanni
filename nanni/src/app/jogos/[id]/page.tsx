@@ -12,18 +12,16 @@ export default async function DetailJogoPage({
   const jogo: JogoProps | undefined = await getJogo(id);
 
   if (!jogo) {
-    return <p>Jogo Não Encontrado</p>;
+    return (
+      <main className={"g-margin g-padding shadow-2 container"}>
+        <p>Não Encontrado</p>
+      </main>
+    );
   }
 
   return (
-    <main className={`g-margin ${styles["main"]}`}>
-      {jogo ? (
-        <div className={`container shadow-1  ${styles["div"]}`}>
-          <DetailJogoContent jogo={jogo} />
-        </div>
-      ) : (
-        <p>CARREGANDO</p>
-      )}
+    <main className={`g-margin container shadow-1 ${styles["main"]}`}>
+      <DetailJogoContent jogo={jogo} />
     </main>
   );
 }

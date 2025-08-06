@@ -50,8 +50,8 @@ export function JogosTabsTraducoes({
 
       setElements([
         <tr key={0}>
-          <td className={styles["td"]}>Não Informado</td>
-          <td className={styles["td"]}>Não Informado</td>
+          <td className={`g-desativado ${styles["td"]}`}>Não Informado</td>
+          <td className={`g-desativado ${styles["td"]}`}>Não Informado</td>
         </tr>,
       ]);
     }

@@ -15,7 +15,9 @@ export default function BuscarContent() {
   const searchParams = useSearchParams();
 
   // > Lista de Itens
-  const [listItem, setListItem] = useState<JogoItemProps[]>([]);
+  const [listItem, setListItem] = useState<JogoItemProps[]>();
+  const [listTags, setListTags] = useState<Set<string>>(new Set());
+  const [tagsSelecionadas, setTagsSelecionadas] = useState<Set<string>>(new Set());
 
   // > Pesquisa Nome
   const queryNome = useRef<string>("");
@@ -24,19 +26,29 @@ export default function BuscarContent() {
   const aplicarFiltro = useCallback(
     (filtroQuery: BuscarFiltros) => {
       const params = new URLSearchParams(searchParams.toString());
-      Object.entries(filtroQuery).forEach(([k, v]) => params.set(k, v));
+      Object.entries(filtroQuery).forEach(([k, v]) => 
+        typeof v === "string" ? params.set(k, v) : ""
+      );
 
       const strParams = params.toString();
-      if (strParams !== searchParams.toString()) {
+      const prevTags = Array.from(tagsSelecionadas);
+      const atuaisTags = filtroQuery.tags ?? [];
+
+      const isTagsIguais = atuaisTags
+        ? atuaisTags.length === prevTags.length && prevTags.every((tag, i) => tag === atuaisTags[i])
+        : true;
+
+      if (strParams !== searchParams.toString() || !isTagsIguais) {
+        setTagsSelecionadas(new Set(filtroQuery.tags));
         router.push(`/buscar?${strParams}`);
       }
     },
-    [router, searchParams],
+    [router, tagsSelecionadas, searchParams],
   );
 
   // Faz a requisição
   const fetchJogo = useCallback(
-    async (params: string, queryParams: BuscarFiltros) => {
+    async (queryParams: BuscarFiltros) => {
       const q = queryParams.q ?? "";
 
       const items = await FilterSearchJogo({
@@ -44,13 +56,19 @@ export default function BuscarContent() {
         qPrimeiraLetra: q.charAt(0) ?? "",
         qNome: q?.length > 1 ? q : "",
         qPrecoRange: [Number(queryParams.min), Number(queryParams.max)],
+        qTags: Array.from(tagsSelecionadas).filter(Boolean),
       });
 
       if (items) {
         setListItem(items);
+
+        const tags = items.flatMap(item => item.tags)
+          .filter((item): item is string => typeof item === "string");
+
+        setListTags(prev => new Set([...prev, ...tags]));
       }
     },
-    [],
+    [tagsSelecionadas],
   );
 
   // Atualiza a página
@@ -67,7 +85,7 @@ export default function BuscarContent() {
       };
 
       queryNome.current = params_Q;
-      fetchJogo(params, queryParams);
+      fetchJogo(queryParams);
     }
   }, [fetchJogo, searchParams]);
 
@@ -82,11 +100,14 @@ export default function BuscarContent() {
             <p className={styles["resultado__query"]}>{queryNome.current}</p>
           </span>
         )}
-        <BuscarFilter onSubmit={aplicarFiltro} />
+        <BuscarFilter onSubmit={aplicarFiltro} tags={listTags} />
       </div>
       <div className={`g-padding ${styles["list"]}`}>
-        {listItem.length > 0 &&
-          listItem.map((item) => <BuscarItem key={item.id} item={item} />)}
+        {listItem && listItem.length > 0 ? (
+          listItem.map((item) => <BuscarItem key={item.id} item={item} />)
+        ) : (
+          <p className={"g-desativado"}>Nada encontrado</p>
+        )}
       </div>
     </>
   );

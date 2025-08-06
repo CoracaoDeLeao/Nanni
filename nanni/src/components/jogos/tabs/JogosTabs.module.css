@@ -9,8 +9,8 @@
 .sobre-div__descricao {
   flex: 2;
   align-self: flex-start;
-  padding-top: 20px;
-  padding-right: 20px;
+  padding: 20px;
+  padding-bottom: 0;
 }
 
 .sobre-div__extra {
