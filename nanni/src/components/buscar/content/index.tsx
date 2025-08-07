@@ -17,7 +17,9 @@ export default function BuscarContent() {
   // > Lista de Itens
   const [listItem, setListItem] = useState<JogoItemProps[]>();
   const [listTags, setListTags] = useState<Set<string>>(new Set());
-  const [tagsSelecionadas, setTagsSelecionadas] = useState<Set<string>>(new Set());
+  const [tagsSelecionadas, setTagsSelecionadas] = useState<Set<string>>(
+    new Set(),
+  );
 
   // > Pesquisa Nome
   const queryNome = useRef<string>("");
@@ -26,8 +28,8 @@ export default function BuscarContent() {
   const aplicarFiltro = useCallback(
     (filtroQuery: BuscarFiltros) => {
       const params = new URLSearchParams(searchParams.toString());
-      Object.entries(filtroQuery).forEach(([k, v]) => 
-        typeof v === "string" ? params.set(k, v) : ""
+      Object.entries(filtroQuery).forEach(([k, v]) =>
+        typeof v === "string" ? params.set(k, v) : "",
       );
 
       const strParams = params.toString();
@@ -35,7 +37,8 @@ export default function BuscarContent() {
       const atuaisTags = filtroQuery.tags ?? [];
 
       const isTagsIguais = atuaisTags
-        ? atuaisTags.length === prevTags.length && prevTags.every((tag, i) => tag === atuaisTags[i])
+        ? atuaisTags.length === prevTags.length &&
+          prevTags.every((tag, i) => tag === atuaisTags[i])
         : true;
 
       if (strParams !== searchParams.toString() || !isTagsIguais) {
@@ -62,10 +65,11 @@ export default function BuscarContent() {
       if (items) {
         setListItem(items);
 
-        const tags = items.flatMap(item => item.tags)
+        const tags = items
+          .flatMap((item) => item.tags)
           .filter((item): item is string => typeof item === "string");
 
-        setListTags(prev => new Set([...prev, ...tags]));
+        setListTags((prev) => new Set([...prev, ...tags]));
       }
     },
     [tagsSelecionadas],

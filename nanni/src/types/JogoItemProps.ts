@@ -4,6 +4,7 @@ export type JogoItemProps = {
   sobre: string;
   banner: string;
   avaliacao: string;
+  numViews: number;
   preco: number;
   tags: string[];
 };

@@ -10,6 +10,7 @@ import {
 import { db } from "../Firebase";
 import { COLLECTIONS } from "@/constants/FirebaseCollections";
 import { JogoProps } from "@/types/JogoProps";
+import { JogoItemProps } from "@/types/JogoItemProps";
 
 export async function getJogo(id: string): Promise<JogoProps | undefined> {
   try {
@@ -99,4 +100,20 @@ export async function setAvaliacao(
 
     return false;
   }
+}
+
+export async function fetchJogosAvaliacoes(
+  jogos: JogoItemProps[] | JogoProps[],
+) {
+  const jogoComAvaliacoes = await Promise.all(
+    jogos.map(async (item) => {
+      const nota = await getAvaliacoes(item.id, item.numViews);
+      return {
+        ...item,
+        avaliacao: nota !== undefined ? nota : "",
+      } as JogoItemProps;
+    }),
+  );
+
+  return jogoComAvaliacoes;
 }

@@ -1,6 +1,5 @@
 "use client";
 
-import styles from "../Header.module.css";
 import { SearchBar } from "@/components/searchbar";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 

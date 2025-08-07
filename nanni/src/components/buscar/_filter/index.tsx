@@ -11,16 +11,17 @@ export default function BuscarFilter({
   onSubmit,
   tags,
 }: {
-  onSubmit: (filtroQuery: BuscarFiltros) => void,
-  tags: Set<string>,
+  onSubmit: (filtroQuery: BuscarFiltros) => void;
+  tags: Set<string>;
 }) {
   const [open, setOpen] = useState(false);
   const [values, setValues] = useState([0, 100]);
   const [tagsSelecionadas, setTagsSelecionadas] = useState([]);
 
-  const formatTags = tags && tags.size > 0 
-    ? Array.from(tags).filter(tag => !tagsSelecionadas.includes(tag))
-    : [];
+  const formatTags =
+    tags && tags.size > 0
+      ? Array.from(tags).filter((tag) => !tagsSelecionadas.includes(tag))
+      : [];
 
   function handleForm(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -68,32 +69,39 @@ export default function BuscarFilter({
             <div className={styles["filter-list__chiplist"]}>
               {tagsSelecionadas.length > 0 ? (
                 tagsSelecionadas.map((item, index) => (
-                  <button 
+                  <button
                     key={item + index}
                     type="button"
-                    onClick={() => setTagsSelecionadas(prev => prev.filter(tag => tag !== item))}
-                    className={`g-button-image ${styles["filter-list__chip"]} ${styles["filter-list__chip-selecionados"]}`}>
-                      {item}
-                      <MdOutlineClose />
+                    onClick={() =>
+                      setTagsSelecionadas((prev) =>
+                        prev.filter((tag) => tag !== item),
+                      )
+                    }
+                    className={`g-button-image ${styles["filter-list__chip"]} ${styles["filter-list__chip-selecionados"]}`}
+                  >
+                    {item}
+                    <MdOutlineClose />
                   </button>
                 ))
               ) : (
                 <p className={"g-desativado"}>Nada selecionado</p>
-              )
-              }
+              )}
             </div>
             <div className={styles["separador"]} />
             <div className={styles["filter-list__chiplist"]}>
               {formatTags.length > 0 ? (
                 formatTags.map((item, index) => (
-                  <button 
+                  <button
                     key={item + index}
                     type="button"
-                    onClick={() => setTagsSelecionadas(prev => 
-                      prev.includes(item) ? prev : [...prev, item]
-                    )}
-                    className={`g-button-image ${styles["filter-list__chip"]} ${styles["filter-list__chip-todos"]}`}>
-                      {item}
+                    onClick={() =>
+                      setTagsSelecionadas((prev) =>
+                        prev.includes(item) ? prev : [...prev, item],
+                      )
+                    }
+                    className={`g-button-image ${styles["filter-list__chip"]} ${styles["filter-list__chip-todos"]}`}
+                  >
+                    {item}
                   </button>
                 ))
               ) : (

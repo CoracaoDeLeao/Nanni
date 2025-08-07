@@ -95,9 +95,9 @@
   min-width: 0;
   background-color: var(--p5);
   gap: 0;
-  transition: 
-    width 0.3s ease, 
-    gap 0.3s ease, 
+  transition:
+    width 0.3s ease,
+    gap 0.3s ease,
     padding 0.3s ease,
     background-color 0.3s ease;
 }
@@ -107,13 +107,15 @@
   padding-top: 1px;
   width: 0;
   opacity: 0;
-  transition: width 0.3s ease, opacity 0.3s ease;
+  transition:
+    width 0.3s ease,
+    opacity 0.3s ease;
 }
 
 .filter-list__chip-selecionados:hover {
   padding-left: 20px;
   gap: 5px;
-  background-color: #FF4444;
+  background-color: #ff4444;
 }
 
 .filter-list__chip-selecionados:hover > svg {

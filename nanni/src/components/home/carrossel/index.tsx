@@ -10,38 +10,59 @@ import "swiper/css/pagination";
 
 import Image from "next/image";
 import styles from "./carrossel.module.css";
+import { BsStarFill } from "react-icons/bs";
+import { TiChevronLeft, TiChevronRight } from "react-icons/ti";
+import { ImNewTab } from "react-icons/im";
+import { fetchJogosCarrossel } from "@/lib/service/HomeService";
+import { getAvaliacoes } from "@/lib/service/JogoService";
 
-export default function Carrossel() {
+export type HomeCarrosselImagem = {
+  id: string;
+  url: string;
+  alt: string;
+  sobre: string;
+  avaliacao: number;
+  numViews: number;
+  tags: string[];
+};
+
+export default function HomeCarrossel() {
+  const [list, setList] = useState<HomeCarrosselImagem[]>([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+
   const swiperRef = useRef<SwiperClass>(null);
   const paginationRef = useRef<HTMLDivElement>(null);
 
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [expansor, setExpansor] = useState(false);
-  const slideMax = 5;
-
-  const [imgs, setImgs] = useState<{ id: string; img: string }[] | null>();
-
-  const dimW = 900;
-  const dimH = 600;
-
   useEffect(() => {
-    const tmp: { id: string; img: string }[] = [];
+    async function run() {
+      const items = await fetchJogosCarrossel(10);
 
-    for (let i = 1; i < 6; i++) {
-      tmp.push({
-        id: `${i}`,
-        img: `https://picsum.photos/${dimW}/${dimH}?random=${i}`,
-      });
+      if (items) {
+        const filteredItems = items.filter(({ url }) => url?.length > 0);
+        const itemsComAvaliacao = await Promise.all(
+          filteredItems.map(async (item) => {
+            const nota = await getAvaliacoes(item.id, item.numViews);
+
+            return {
+              ...item,
+              avaliacao: nota !== undefined ? nota : "00",
+            } as HomeCarrosselImagem;
+          }),
+        );
+
+        setList(itemsComAvaliacao);
+      }
     }
 
-    setImgs(tmp);
+    run();
   }, []);
 
-  return imgs ? (
+  return list && list.length > 0 ? (
     <>
       <Swiper
         modules={[Navigation, Pagination]}
         spaceBetween={50}
+        navigation={true}
         pagination={{
           el: paginationRef.current!,
           clickable: true,
@@ -53,93 +74,68 @@ export default function Carrossel() {
         onSlideChange={(swiper) => {
           setActiveIndex(swiper.activeIndex);
         }}
+        className={styles["navigation"]}
       >
-        {imgs.map(({ id, img }) => (
+        {list.map((item) => (
           <SwiperSlide
-            key={id}
-            style={{ display: "flex", justifyContent: "center" }}
+            key={item.id}
+            className={styles["slide"]}
+            style={{ height: "400px" }}
           >
-            <Image
-              src={img}
-              alt="TESTE"
-              width={dimW}
-              height={dimH}
-              layout="intrinsic"
-              style={{ maxHeight: "400px", width: "auto" }}
-            />
+            <div className={styles["slide-div"]} style={{ height: "400px" }}>
+              <Image
+                src={item.url}
+                alt={list[activeIndex]?.alt ?? ""}
+                quality={75}
+                fill
+                unoptimized={true}
+                style={{
+                  objectFit: "cover",
+                }}
+              />
+            </div>
           </SwiperSlide>
         ))}
         <div className={styles["info-container"]}>
-          <button
-            className={`g-button-image ${activeIndex == 0 ? "g-desativado" : ""}`}
+          <TiChevronLeft
+            size={40}
+            className={`
+              g-button-image 
+              ${styles["nav-icon"]}
+              ${activeIndex == 0 ? "g-desativado" : ""}
+            `}
             onClick={() => swiperRef.current?.slidePrev()}
-          >
-            <svg
-              viewBox="0 0 16 16"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              width={40}
-              height={40}
-            >
-              <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z" />
-            </svg>
-          </button>
+          />
 
           <div className={`${styles["info-box"]} shadow-2`}>
-            <span
-              className={`${styles["info-texto"]} ${expansor ? styles["info-texto-aberto"] : styles["info-texto-fechado"]}`}
-            >
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                faucibus leo urna, non eleifend felis ullamcorper tincidunt.
-                Vivamus dapibus gravida nunc.Lorem ipsum dolor sit amet,
-                consectetur adipiscing elit. Sed faucibus leo urna, non eleifend
-                felis ullamcorper tincidunt. Vivamus dapibus gravida nunc.Lorem
-                ipsum dolor sit amet, consectetur adipiscing elit. Sed faucibus
-                leo urna, non eleifend felis ullamcorper tincidunt. Vivamus
-                dapibus gravida nunc.Lorem ipsum dolor sit amet, consectetur
-                adipiscing elit. Sed faucibus leo urna, non eleifend felis
-                ullamcorper tincidunt. Vivamus dapibus gravida nunc.
-              </p>
+            <span className={styles["info-texto"]}>
+              <p>{list[activeIndex].sobre ?? ""}</p>
             </span>
-            <span
-              className={styles["info-expansor"]}
-              onClick={() => setExpansor(!expansor)}
-            >
-              {!expansor ? "Ler Mais..." : "Fechar"}
-            </span>
+            <p className={styles["info-redirect"]}>
+              Visitar Página
+              <ImNewTab />
+            </p>
             <div className={styles["info-details-div"]}>
               <p className={styles["info-details-tags"]}>
-                #roguelike, #ação, #co-op, #fantasia, #roguelike, #ação, #co-op,
-                #fantasia
+                {list[activeIndex]?.tags.map((item) => `#${item}`).join(", ") ??
+                  ""}
               </p>
               <span className={styles["info-details-avaliacao"]}>
-                <Image
-                  src={"/ic/star.png"}
-                  alt={"Imagem de avaliação"}
-                  width={16}
-                  height={16}
-                />
-                <p>10/10</p>
+                <BsStarFill />
+                <p>{list[activeIndex]?.avaliacao ?? "--"}/10</p>
               </span>
               <button className={styles["info-details-preco"]}>R$ 9.99</button>
             </div>
           </div>
-
-          <button
-            className={`g-button-image ${activeIndex == slideMax - 1 ? "g-desativado" : ""}`}
+          <TiChevronRight
+            className={`
+              g-button-image 
+              ${styles["nav-icon"]}
+              ${activeIndex == list.length - 1 ? "g-desativado" : ""}
+            `}
             onClick={() => swiperRef.current?.slideNext()}
-          >
-            <svg
-              viewBox="0 0 16 16"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              width={40}
-              height={40}
-            >
-              <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
-            </svg>
-          </button>
+            size={40}
+          />
         </div>
       </Swiper>
       <div className={styles["pagination-div"]}>

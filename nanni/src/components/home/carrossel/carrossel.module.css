@@ -13,7 +13,7 @@
   display: grid;
   gap: 15px;
   border-radius: 4px;
-  width: 60%;
+  width: 75%;
   max-height: 100%;
   padding: 20px;
   background-color: var(--foreground);
@@ -26,6 +26,11 @@
   font-size: 16;
   height: auto;
   transition: max-height ease 0.5s;
+}
+
+.info-texto > p {
+  font-size: 14px;
+  color: white;
 }
 
 .info-texto-fechado {
@@ -48,14 +53,19 @@
   pointer-events: none;
 }
 
-.info-expansor {
-  font-size: 16;
+.info-redirect {
+  display: inline-flex;
+  width: fit-content;
+  gap: 5px;
+  font-size: 14px;
   font-weight: var(--semi-bold);
   color: var(--p5);
+  user-select: none;
 }
 
-.info-expansor:hover {
+.info-redirect:hover {
   cursor: pointer;
+  text-decoration: underline;
 }
 
 .info-details-div {
@@ -75,6 +85,7 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: white;
 }
 
 .info-details-avaliacao {
@@ -87,6 +98,7 @@
   font-size: 14;
   letter-spacing: 2px;
   padding-top: 2px;
+  color: white;
 }
 
 .info-details-preco {
@@ -103,9 +115,22 @@
   cursor: pointer;
 }
 
-.pagination-div {
+.slide {
+  position: relative;
   display: flex;
   justify-content: center;
+}
+
+.slide-div {
+  position: relative;
+  width: 50%;
+}
+
+.pagination-div {
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
 }
 
 .pagination {
@@ -129,8 +154,43 @@
   opacity: 1;
 }
 
-@media screen and (max-width: 740px) {
+.navigation :global(.swiper-button-prev),
+.navigation :global(.swiper-button-next) {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+@media screen and (max-width: 768px) {
   .info-box {
     width: 100%;
+    border-radius: 0;
+  }
+
+  .nav-icon {
+    width: 0;
+    opacity: 0;
+  }
+
+  .navigation :global(.swiper-button-prev),
+  .navigation :global(.swiper-button-next) {
+    background-color: red;
+    color: var(--foreground) !important;
+    fill: var(--foreground) !important;
+  }
+
+  .navigation:hover :global(.swiper-button-prev),
+  .navigation:hover :global(.swiper-button-next) {
+    background-color: white;
+  }
+
+  .slide-div {
+    width: 80%;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .slide-div {
+    width: 95%;
   }
 }

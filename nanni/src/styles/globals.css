@@ -84,12 +84,20 @@ h3 {
   cursor: default;
 }
 
+.g-header-distance {
+  padding-top: 100px;
+}
+
 .shadow-1 {
   box-shadow: 2px 2px 0 0 var(--shadow-color);
 }
 
 .shadow-2 {
   box-shadow: 0 4px 0 0 var(--shadow-color);
+}
+
+.shadow-3 {
+  box-shadow: 2px -1px 2px 0 var(--shadow-color);
 }
 
 a {

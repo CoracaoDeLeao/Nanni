@@ -11,20 +11,35 @@
   cursor: pointer;
 }
 
-.imagem {
-  object-fit: cover;
-  height: auto;
+.banner {
+  height: 220px;
+  width: 100%;
 }
 
-.info {
+.banner-image {
+  object-fit: cover;
+}
+
+.banner > p {
+  height: 100%;
+  font-size: 20px;
+  text-align: center;
+  padding-top: 50px;
+}
+
+.tags {
   overflow: hidden;
-  background: linear-gradient(0deg, var(--foreground) 80%, transparent 100%);
   width: 100%;
+  min-height: 20px;
   padding: 5px;
   padding-top: 20px;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background: linear-gradient(0deg, var(--foreground) 80%, transparent 100%);
 }
 
-.info > p {
+.tags > p {
   opacity: 0.6;
   font-size: 12;
   color: var(--white);
@@ -47,8 +62,14 @@
   z-index: 2;
 }
 
-.avaliacaoImage {
-  height: auto;
+.avaliacao > p {
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+}
+
+.avaliacao > svg {
+  padding-bottom: 3px;
 }
 
 .preco {

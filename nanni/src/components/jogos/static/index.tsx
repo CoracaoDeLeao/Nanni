@@ -27,7 +27,10 @@ export function DetailJogoStatic({
   noDemo = false,
   bannerSize = 100,
 }) {
-  const galeriasUrls = images ? images.map((item) => item.url) : [];
+  const galeriasUrls =
+    images?.length > 0 && images[0]?.url
+      ? images.map((item) => item?.url ?? "/file.svg")
+      : [];
 
   const galeriaImages =
     typeof bannerImage?.url === "string"
