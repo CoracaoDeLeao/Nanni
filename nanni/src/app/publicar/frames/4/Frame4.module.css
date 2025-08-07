@@ -1,0 +1,294 @@
+.container {
+  --color-background-container: #f8fafd;
+  --color-shadow-light: rgba(7, 25, 52, 0.1);
+  --color-text-primary: #071934;
+  --color-border-title: #e0e7f1;
+  --color-background-section: white;
+  --color-shadow-section: rgba(7, 25, 52, 0.05);
+  --color-shadow-section-hover: rgba(7, 25, 52, 0.1);
+  --color-fileinfo-bg: #f5f9ff;
+  --color-fileinfo-border: #0d2a5a;
+  --color-button-gradient-start: #0d2a5a;
+  --color-button-gradient-end: #071934;
+  --color-button-hover-start: #133a7a;
+  --color-button-hover-end: #0a2248;
+  --color-button-hover-shadow: rgba(7, 25, 52, 0.2);
+  --color-sentStatus-bg: #f0f9f1;
+  --color-sentStatus-text: #2e7d32;
+  --color-removeButton: #e53935;
+  --color-removeButton-hover: #ffebee;
+  --color-input-border: #d1dbe7;
+  --color-input-focus: #0d2a5a;
+  --color-input-focus-shadow: rgba(13, 42, 90, 0.2);
+  --color-input-disabled-bg: #f5f7fa;
+  --color-input-disabled-text: #8a9bb2;
+  --color-clearButton: #94a3b8;
+  --color-clearButton-hover-bg: #f1f5f9;
+  --color-clearButton-hover-text: #64748b;
+  --color-checkbox-accent: #0d2a5a;
+  --color-error: #e53935;
+  --color-error-bg: #fff6f6;
+  --color-error-border: #ffd1d1;
+
+  background-color: var(--color-background-container);
+  padding: 30px;
+  border-radius: 12px;
+  margin: 0 auto;
+  box-shadow: 0 5px 15px var(--color-shadow-light);
+  width: 100%;
+}
+
+.mainTitle {
+  color: var(--color-text-primary);
+  margin-bottom: 30px;
+  font-size: 2.2rem;
+  border-bottom: 2px solid var(--color-border-title);
+  padding-bottom: 15px;
+}
+
+.section {
+  background: var(--color-background-section);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 6px var(--color-shadow-section);
+  transition: all 0.3s ease;
+}
+
+.section:hover {
+  box-shadow: 0 6px 12px var(--color-shadow-section-hover);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sectionTitle {
+  color: var(--color-text-primary);
+  margin: 0;
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.fileInfo {
+  color: var(--color-text-primary);
+  font-size: 0.95rem;
+  margin-bottom: 15px;
+  padding: 12px;
+  background-color: var(--color-fileinfo-bg);
+  border-radius: 6px;
+  border-left: 3px solid var(--color-fileinfo-border);
+}
+
+.fileInfo p {
+  margin: 0;
+}
+
+.versionInputContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.versionInput {
+  padding: 8px 12px;
+  border: 1px solid var(--color-input-border);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  width: 80px;
+}
+
+.versionInput:focus {
+  outline: none;
+  border-color: var(--color-input-focus);
+  box-shadow: 0 0 0 2px var(--color-input-focus-shadow);
+}
+
+.button {
+  background: linear-gradient(
+    to bottom,
+    var(--color-button-gradient-start),
+    var(--color-button-gradient-end)
+  );
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40%;
+}
+
+.button:hover {
+  background: linear-gradient(
+    to bottom,
+    var(--color-button-hover-start),
+    var(--color-button-hover-end)
+  );
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px var(--color-button-hover-shadow);
+}
+
+.button:active {
+  transform: translateY(0);
+}
+
+.icon {
+  font-size: 1.2rem;
+  margin-right: 0.4rem;
+}
+
+.sentStatus {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-sentStatus-text);
+  font-weight: 600;
+  padding: 12px;
+  background-color: var(--color-sentStatus-bg);
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+.checkIcon {
+  font-size: 1.4rem;
+  color: var(--color-sentStatus-text);
+}
+
+.removeButton {
+  background: none;
+  border: none;
+  color: var(--color-removeButton);
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.removeButton:hover {
+  background-color: var(--color-removeButton-hover);
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 50%;
+}
+
+.currencyContainer {
+  position: relative;
+}
+
+.currencyInput {
+  padding: 12px 40px 12px 15px;
+  border: 2px solid var(--color-input-border);
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: all 0.3s;
+  color: var(--color-text-primary);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.currencyInput:focus {
+  outline: none;
+  border-color: var(--color-input-focus);
+  box-shadow: 0 0 0 2px var(--color-input-focus-shadow);
+}
+
+.currencyInput:disabled {
+  background-color: var(--color-input-disabled-bg);
+  color: var(--color-input-disabled-text);
+}
+
+.clearButton {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--color-clearButton);
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 5px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clearButton:hover {
+  background-color: var(--color-clearButton-hover-bg);
+  color: var(--color-clearButton-hover-text);
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  color: var(--color-text-primary);
+}
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-checkbox-accent);
+  cursor: pointer;
+}
+
+.checkboxText {
+  font-size: 0.95rem;
+}
+
+.noFileOption {
+  margin-bottom: 15px;
+}
+
+/* ERROR */
+
+.error {
+  color: var(--color-error);
+  background-color: var(--color-error-bg);
+  border: 1px solid var(--color-error-border);
+  border-radius: 6px;
+  padding: 10px 15px;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: fadeIn 0.3s ease;
+}
+
+.error::before {
+  content: "⚠";
+  font-size: 1.2rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
