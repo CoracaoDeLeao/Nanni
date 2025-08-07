@@ -11,6 +11,7 @@ import { publishGame } from "@/lib/service/PublicarService";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
+import { DetailJogoStatic } from "@/components/jogos/static";
 
 // TODO: Fazer o preview
 
@@ -275,7 +276,7 @@ export default function PublicarJogo() {
 
   return (
     <FormProvider {...methods}>
-      <div className={styles.container}>
+      <div className={styles.container} style={{ paddingTop: "var(--distance-header)" }}>
         <div className={styles.mainContainer}>
           <div className={styles.contentContainer}>
             <AnimatePresence mode="wait" initial={false} custom={direction}>
@@ -354,7 +355,7 @@ export default function PublicarJogo() {
           </div>
 
           <div className={styles.previewContainer}>
-            <p>ALO</p>
+            <DetailJogoStatic />
           </div>
         </div>
       </div>

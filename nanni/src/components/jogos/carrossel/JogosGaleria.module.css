@@ -32,6 +32,17 @@
   width: 70%;
   background-color: var(--foreground);
   border-radius: 4px;
+  transition: width 0.5s ease-in-out;
+}
+
+.swiper-one {
+  width: 100%;
+}
+
+.swiper-slide {
+  position: "relative";
+  display: "flex";
+  justify-content: "center";
 }
 
 .paginator {

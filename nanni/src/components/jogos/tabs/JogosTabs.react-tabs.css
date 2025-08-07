@@ -24,6 +24,12 @@
   border-left: none;
 }
 
+.react-tabs__tab--disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+}
+
 .react-tabs__tab--selected {
   background: var(--white);
   border-color: var(--black);

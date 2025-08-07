@@ -3,6 +3,7 @@
   --screen-max-width: 1440px;
   --padding-horizontal-global: 20px;
   --container-radius-global: 2px;
+  --distance-header: 100px;
 
   /* Variáveis para formatação de texto */
   --semi-bold: 600;
@@ -85,7 +86,7 @@ h3 {
 }
 
 .g-header-distance {
-  padding-top: 100px;
+  padding-top: var(--distance-header);
 }
 
 .shadow-1 {

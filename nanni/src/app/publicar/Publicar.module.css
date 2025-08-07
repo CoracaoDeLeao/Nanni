@@ -54,9 +54,9 @@
 
 .previewContainer {
   flex: 1;
-  background-color: var(--color-preview-bg);
+  /* background-color: var(--color-preview-bg); */
   border-radius: 8px;
-  padding: 20px;
+  padding: 10px;
   box-shadow: 0 2px 10px var(--color-overlay-bg);
 }
 

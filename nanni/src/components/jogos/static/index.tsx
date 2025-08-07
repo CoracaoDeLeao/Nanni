@@ -28,14 +28,9 @@ export function DetailJogoStatic({
   bannerSize = 100,
 }) {
   const galeriasUrls =
-    images?.length > 0 && images[0]?.url
-      ? images.map((item) => item?.url ?? "/file.svg")
+    images?.length > 0 && typeof images[0]?.url === "string"
+      ? images.map((item) => item?.url).filter(({ url }) => url && typeof url === "string")
       : [];
-
-  const galeriaImages =
-    typeof bannerImage?.url === "string"
-      ? [bannerImage.url, ...galeriasUrls]
-      : [galeriasUrls];
 
   const backgroundStatusDev: string | undefined =
     devStatus in colorStatusDev
@@ -46,8 +41,13 @@ export function DetailJogoStatic({
 
   return (
     <>
-      <div className={styles["div"]}>
-        {false && <JogosGaleria galeria={galeriaImages} />}
+      <div className={styles["div"]} >
+        {galeriasUrls && 
+          galeriasUrls.length > 0 && 
+          <JogosGaleria 
+            galeria={galeriasUrls} 
+            dimH={200} 
+            aspectRatio={200/100}/>}
         <div className={styles["jogo-titulo-div"]}>
           <Image
             src={iconImage?.url ?? "/file.svg"}
@@ -70,12 +70,12 @@ export function DetailJogoStatic({
                   {devStatus}
                 </p>
               )}
-              <span className={styles["jogo-avaliacao"]}>
+              <span className={styles["jogo-avaliacao"]} style={{ userSelect: "none"}}>
                 <BsStarFill />
                 <p>--/10</p>
               </span>
             </span>
-            <div className={styles["jogo-botoes"]}>
+            <div className={styles["jogo-botoes"]} style={{ userSelect: "none", pointerEvents: "none"}}>
               <JogoPreco
                 preco={precoValue}
                 isFree={isFree || precoValue === 0}
@@ -92,6 +92,7 @@ export function DetailJogoStatic({
         textTranslations={textTranslations}
         audioTranslations={audioTranslations}
         genres={genres}
+        sensitiveContents={sensitiveContents}
         tags={tags}
         principalFile={principalFile}
         demoFile={demoFile}

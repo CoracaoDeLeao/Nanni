@@ -12,11 +12,14 @@ export function StaticJogoTabs({
   textTranslations = [],
   audioTranslations = [],
   genres = [],
+  sensitiveContents = [],
   tags = [],
   principalFile = null,
   demoFile = null,
 }) {
-  const allTags = tags ? tags.map((item) => `#${item}`).join(", ") : [];
+  const allTags = tags?.length > 0
+    ? tags.map((item) => `#${item}`).join(", ") 
+    : [];
 
   return (
     <Tabs>
@@ -26,7 +29,7 @@ export function StaticJogoTabs({
       </TabList>
 
       <TabPanel>
-        <div className={styles["sobre-div"]}>
+        <div className={styles["sobre-div"]} style={{ maxHeight: "100%"}}>
           <div className={styles["sobre-div__descricao"]}>
             {text ? (
               <p>{text}</p>
@@ -68,27 +71,27 @@ export function StaticJogoTabs({
             />
 
             <h3 className={styles["sobre-div__outros-titulo"]}>Gênero</h3>
-            {genres && genres.length > 0 ? (
-              <ul className={styles["sobre-div__genero"]}>
-                {genres.map((item, index) => (
-                  <li key={index}>{item}</li>
-                ))}
-              </ul>
-            ) : (
-              <p className={"g-desativado"}>Não Informado</p>
-            )}
+              {genres && genres.length > 0 ? (
+                <ul className={styles["sobre-div__genero"]}>
+                  {genres.map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p className={"g-desativado"}>Não Informado</p>
+              )}
 
             <h3 className={styles["sobre-div__outros-titulo"]}>Tags</h3>
-            {allTags.length > 0 ? (
-              <p className={styles["sobre-div__tags"]}>{allTags}</p>
-            ) : (
-              <p className={"g-desativado"}>Não Informado</p>
-            )}
+              {allTags.length > 0 ? (
+                <p className={styles["sobre-div__tags"]}>{allTags}</p>
+              ) : (
+                <p className={"g-desativado"}>Não Informado</p>
+              )}
           </div>
         </div>
       </TabPanel>
 
-      <TabPanel />
+      <TabPanel /> {/*Painel de Changelog */}
     </Tabs>
   );
 }

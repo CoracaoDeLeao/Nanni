@@ -9,38 +9,25 @@ import "swiper/css/scrollbar";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import styles from "./JogosGaleria.module.css";
+import { TiChevronLeft, TiChevronRight } from "react-icons/ti";
 
 type JogosGaleriaProps = {
   galeria: string[];
-  dimW?: number;
   dimH?: number;
+  aspectRatio?: number;
 };
 
 export default function JogosGaleria({
   galeria,
-  dimW,
-  dimH,
+  dimH = 200,
+  aspectRatio = 100,
 }: JogosGaleriaProps) {
   const swiperRef = useRef<SwiperClass>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
-  const [imgs, setImgs] = useState<string[] | null>(null);
-
-  useEffect(() => {
-    const tmp: string[] = [];
-
-    if (galeria && galeria.length > 0) {
-      galeria.forEach((item) => {
-        tmp.push(item);
-      });
-
-      setImgs(tmp);
-    }
-  }, [galeria]);
-
   return (
-    imgs && (
+    galeria && galeria.length > 0 && (
       <div className={styles["galeria-div"]}>
         <Swiper
           modules={[Navigation, Thumbs]}
@@ -53,18 +40,20 @@ export default function JogosGaleria({
           onSlideChange={(swiper) => {
             setActiveIndex(swiper.activeIndex);
           }}
-          className={styles["swiper"]}
+          className={`
+            ${styles["swiper"]}
+            ${galeria.length === 1 ? styles["swiper-one"] : ""}
+          `}
         >
-          {imgs.map((item, index) => (
+          {galeria.map((item, index) => (
             <SwiperSlide
               key={index}
+              className={styles["swiper-slider"]}
               style={{
-                position: "relative",
-                display: "flex",
-                justifyContent: "center",
-                width: "100%",
-                maxHeight: dimH,
-                aspectRatio: `${dimW} / ${dimH}`,
+                maxHeight: galeria.length === 1 
+                  ? dimH*1.2 
+                  : dimH,
+                aspectRatio: aspectRatio,
               }}
             >
               <Image
@@ -72,69 +61,61 @@ export default function JogosGaleria({
                 alt={`Galeria imagem : ${index + 1}`}
                 fill
                 style={{
-                  objectFit: "contain",
+                  objectFit: "cover",
                 }}
               />
             </SwiperSlide>
           ))}
-          <div className={styles["control-div"]}>
-            <button
-              className={`g-button-image ${styles["control-prev"]} ${activeIndex == 0 ? "g-desativado" : ""}`}
-              onClick={() => swiperRef.current?.slidePrev()}
-            >
-              <svg
-                viewBox="0 0 16 16"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                width={20}
-                height={20}
-              >
-                <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z" />
-              </svg>
-            </button>
-            <button
-              className={`g-button-image ${styles["control-next"]} ${activeIndex == imgs.length - 1 ? "g-desativado" : ""}`}
-              onClick={() => swiperRef.current?.slideNext()}
-            >
-              <svg
-                viewBox="0 0 16 16"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                width={20}
-                height={20}
-              >
-                <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
-              </svg>
-            </button>
-          </div>
+          {galeria.length > 1 && (
+            <div className={styles["control-div"]}>
+              <TiChevronLeft 
+                onClick={() => swiperRef.current?.slidePrev()}
+                className={`
+                  ${styles["control-prev"]} 
+                  ${activeIndex == 0 ? "g-desativado" : ""}`
+                }
+                size={20} 
+              />            
+              <TiChevronRight 
+                onClick={() => swiperRef.current?.slideNext()}
+                className={`
+                  ${styles["control-next"]} 
+                  ${activeIndex == galeria.length - 1 ? "g-desativado" : ""}
+                `}
+                size={20}
+              />  
+            </div>
+          )}
         </Swiper>
 
         {/* Thumbs */}
-        <Swiper
-          modules={[Thumbs, Scrollbar, Mousewheel]}
-          direction="vertical"
-          watchSlidesProgress
-          scrollbar={{ draggable: true }}
-          mousewheel={true}
-          slidesPerView={2}
-          spaceBetween={5}
-          freeMode={true}
-          onSwiper={setThumbsSwiper}
-          className={styles["paginator"]}
-        >
-          {imgs.map(({ id, img }) => (
-            <SwiperSlide key={id} className={styles["paginator-slide"]}>
-              <Image
-                src={img}
-                alt={`Imagem ${id}`}
-                fill
-                style={{
-                  objectFit: "contain",
-                }}
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        {galeria.length > 1 && (
+          <Swiper
+            modules={[Thumbs, Scrollbar, Mousewheel]}
+            direction="vertical"
+            watchSlidesProgress
+            scrollbar={{ draggable: true }}
+            mousewheel={true}
+            slidesPerView={2}
+            spaceBetween={5}
+            freeMode={true}
+            onSwiper={setThumbsSwiper}
+            className={styles["paginator"]}
+          >
+            {galeria.map(({ id, img }) => (
+              <SwiperSlide key={id} className={styles["paginator-slide"]}>
+                <Image
+                  src={img}
+                  alt={`Imagem ${id}`}
+                  fill
+                  style={{
+                    objectFit: "contain",
+                  }}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        )}
       </div>
     )
   );
