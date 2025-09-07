@@ -21,7 +21,7 @@
   --color-form-bg: rgb(4, 0, 255);
   --color-form-header-bg: rgb(7, 25, 52);
   --color-form-header-border: rgb(255, 255, 255);
-  --color-preview-bg: rgb(255, 0, 0);
+  --color-preview-bg: rgb(255, 255, 255);
   --color-gallery-btn-bg: #28a745;
 
   background-color: var(--color-page-bg);

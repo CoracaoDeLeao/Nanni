@@ -10,7 +10,8 @@ import Frame4 from "./frames/4";
 import { publishGame } from "@/lib/service/PublicarService";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
+import { DetailJogoStatic } from "@/components/jogos/static";
 
 // TODO: Fazer o preview
 
@@ -127,6 +128,9 @@ export default function PublicarJogo() {
       noDemo: false,
     },
   });
+
+  // Obter valores do formulário para o preview
+  const formValues = useWatch({ control: methods.control }) as FormValues;
 
   //  Validação
   const { trigger } = methods;
@@ -354,7 +358,27 @@ export default function PublicarJogo() {
           </div>
 
           <div className={styles.previewContainer}>
-            <p>ALO</p>
+            <DetailJogoStatic
+              nomeJogo={formValues.nomeJogo}
+              bannerImage={formValues.bannerImage}
+              iconImage={formValues.iconImage}
+              images={formValues.images}
+              devStatus={formValues.devStatus}
+              ageRating={formValues.ageRating}
+              text={formValues.text}
+              textTranslations={formValues.textTranslations}
+              audioTranslations={formValues.audioTranslations}
+              sensitiveContents={formValues.sensitiveContents}
+              genres={formValues.genres}
+              tags={formValues.tags}
+              plataforma={formValues.plataforma}
+              principalFile={formValues.principalFile}
+              demoFile={formValues.demoFile}
+              currencyValue={formValues.currencyValue?.toString() ?? ""}
+              isFree={formValues.isFree}
+              noDemo={formValues.noDemo}
+              bannerSize={100}
+            />
           </div>
         </div>
       </div>
